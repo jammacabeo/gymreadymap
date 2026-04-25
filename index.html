@@ -3,8 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GYM READY MAP — Gym Intelligence Map v4.7</title>
+
+<!-- ── Primary SEO ── -->
+<title>HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo</title>
+<meta name="description" content="Interactive map of HYROX-ready gyms across Greater Tokyo. Find official HYROX training clubs and gyms with full station coverage (SkiErg, Sled Push, Wall Balls, etc.) in Tokyo, Kanagawa, Saitama, and Chiba.">
+<meta name="keywords" content="HYROX Japan, HYROX Tokyo, HYROX gym map, HYROX training, HYROX gyms, fitness Tokyo, SkiErg Tokyo, sled push Tokyo, HYROX prep">
+<meta name="author" content="Gym Ready Map">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://gymreadymap.com/">
+
+<!-- ── Open Graph (Facebook, LINE, WhatsApp, Slack link previews) ── -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gymreadymap.com/">
+<meta property="og:title" content="HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo">
+<meta property="og:description" content="Interactive map of HYROX-ready gyms across Greater Tokyo. Find gyms with full station coverage for HYROX race prep.">
+<meta property="og:image" content="https://gymreadymap.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:site_name" content="Gym Ready Map">
+
+<!-- ── Twitter Card (also used by some other platforms) ── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://gymreadymap.com/">
+<meta name="twitter:title" content="HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo">
+<meta name="twitter:description" content="Interactive map of HYROX-ready gyms across Greater Tokyo with full station coverage.">
+<meta name="twitter:image" content="https://gymreadymap.com/og-image.png">
+
+<!-- ── Favicon & PWA basics ── -->
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0d1117">
+
+<!-- ── JSON-LD Structured Data: tells Google "this is a directory of fitness businesses" ── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Gym Ready Map",
+  "alternateName": "HYROX Japan Gym Map",
+  "url": "https://gymreadymap.com/",
+  "description": "Interactive map of HYROX-ready training gyms across Greater Tokyo, Japan.",
+  "inLanguage": ["en", "ja"],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://gymreadymap.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Gym Ready Map",
+  "url": "https://gymreadymap.com/",
+  "logo": "https://gymreadymap.com/favicon.png",
+  "description": "A community-built intelligence map of HYROX-ready gyms in Greater Tokyo.",
+  "areaServed": {
+    "@type": "Place",
+    "name": "Greater Tokyo, Japan"
+  }
+}
+</script>
+
+<!-- ── External CSS (unchanged) ── -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
