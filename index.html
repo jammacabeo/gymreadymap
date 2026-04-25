@@ -398,14 +398,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Gym Intelligence Map · Greater Tokyo 2026 · v4.7</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.7</div>
   </div>
   <div class="header-stats">
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">+ Submit/Verify a Gym</a>
     <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" title="Refetch data from Google Sheets">↻ Refresh</button>
     <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l">Mapped Gyms</div></div>
     <div class="hstat"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l">Official</div></div>
-    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l">HYROX Ready</div></div>
+    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l">HYROX® Ready</div></div>
     <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l">Verified</div></div>
   </div>
 </div>
@@ -418,7 +418,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <div style="display:flex;gap:4px;">
     <button class="fb on" data-group="type" data-val="all" onclick="setTopFilter('type','all',this)">All</button>
     <button class="fb" data-group="type" data-val="official" onclick="setTopFilter('type','official',this)">Official</button>
-    <button class="fb" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)">HYROX Ready</button>
+    <button class="fb" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)">HYROX® Ready</button>
   </div>
   <div class="fsep"></div>
   <span class="fl">Region</span>
@@ -502,7 +502,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
       <div class="ml-row"><div class="ml-dot" style="background:#484f58"></div>Unverified — TBC</div>
       <div class="ml-sep"></div>
       <div class="ml-row"><div class="ml-sq" style="background:var(--accent)"></div>★ Official</div>
-      <div class="ml-row"><div class="ml-sq" style="background:var(--blue)"></div>HYROX Ready</div>
+      <div class="ml-row"><div class="ml-sq" style="background:var(--blue)"></div>HYROX® Ready</div>
       <div class="ml-sep"></div>
       <div class="ml-row"><div class="ml-dot" style="background:var(--verified);width:8px;height:8px"></div>Verified</div>
       <div class="ml-row"><div class="ml-dot" style="background:var(--unverified);width:8px;height:8px"></div>Unverified</div>
@@ -553,7 +553,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <button class="mfchip clear-chip" onclick="mobileClearFilters()">✕ Clear</button>
   <button class="mfchip on" data-mgroup="type" data-mval="all" onclick="setMobileFilter('type','all',this)">All</button>
   <button class="mfchip" data-mgroup="type" data-mval="official" onclick="setMobileFilter('type','official',this)">★ Official</button>
-  <button class="mfchip" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)">HYROX Ready</button>
+  <button class="mfchip" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)">HYROX® Ready</button>
   <button class="mfchip on" data-mgroup="status" data-mval="all" onclick="setMobileFilter('status','all',this)">All Status</button>
   <button class="mfchip" data-mgroup="status" data-mval="verified" onclick="setMobileFilter('status','verified',this)">✓ Verified</button>
 </div>
@@ -594,7 +594,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <div class="mfd-chips">
       <button class="mfd-chip on" data-dgroup="type" data-dval="all" onclick="setDrawerFilter('type','all',this)">All</button>
       <button class="mfd-chip" data-dgroup="type" data-dval="official" onclick="setDrawerFilter('type','official',this)">★ Official</button>
-      <button class="mfd-chip" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)">HYROX Ready</button>
+      <button class="mfd-chip" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)">HYROX® Ready</button>
     </div>
   </div>
 
@@ -844,7 +844,7 @@ function showPopupForGym(g){
 
   let statusHTML='';
   if(g.official) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>';
-  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX Ready</span>';
+  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
   if(g.verified) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>';
   else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
   if(g.lang) statusHTML+='<span class="lang-badge">'+g.lang+'</span>';
@@ -915,7 +915,7 @@ function renderGyms(){
       Array(8).fill('<div class="gd gd-unk"></div>').join('');
     const officialBadge=g.official?
       '<span class="gi-sbadge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>':
-      '<span class="gi-sbadge" style="border:1px solid var(--blue);color:var(--blue);">HYROX Ready</span>';
+      '<span class="gi-sbadge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
     const verifiedBadge=g.verified?
       '<span class="gi-sbadge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>':
       '<span class="gi-sbadge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
@@ -1012,7 +1012,7 @@ function renderList(){
       </td>
       <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
         ${g.official?'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--accent);color:var(--accent);border-radius:2px;">★ Official</span>'
-        :'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--blue);color:var(--blue);border-radius:2px;">HYROX Ready</span>'}
+        :'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--blue);color:var(--blue);border-radius:2px;">HYROX® Ready</span>'}
       </td>
       <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
         ${g.verified?'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;padding:2px 7px;border:1px solid var(--verified);color:var(--verified);border-radius:2px;">✓ Verified</span>'
@@ -1198,7 +1198,7 @@ function openMobileDetail(id){
 
   let officialBadge=g.official?
     '<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>':
-    '<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX Ready</span>';
+    '<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
   let verifiedBadge=g.verified?
     '<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>':
     '<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
