@@ -275,7 +275,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .logo-sub{display:none;}
   .header-stats{gap:10px;}
   .hstat{display:none;}
-  .submit-btn-header{font-size:.6rem;padding:7px 12px;}
+  .submit-btn-header{font-size:.7rem;padding:8px 14px;}
 
   /* Map fills everything below header */
   .main{position:relative;overflow:hidden;}
@@ -284,19 +284,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
   /* ── MOBILE FILTER CHIPS (floating above bottom sheet) ── */
   .mobile-filters{
-    position:absolute;bottom:0;left:0;right:0;
+    position:absolute;bottom:78px;left:0;right:0;
     z-index:600;
-    display:flex;gap:6px;padding:10px 14px;
+    display:flex;gap:8px;padding:10px 14px;
     overflow-x:auto;scrollbar-width:none;
-    background:linear-gradient(to top, rgba(13,17,23,.98) 60%, transparent);
+    background:linear-gradient(to top, rgba(13,17,23,.75), transparent);
     pointer-events:none;
   }
   .mobile-filters::-webkit-scrollbar{display:none;}
   .mobile-filters .mfchip{pointer-events:all;}
   .mfchip{
-    font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;
+    font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:700;
     letter-spacing:.08em;text-transform:uppercase;
-    padding:5px 12px;border:1px solid var(--border);
+    padding:8px 15px;border:1px solid var(--border);
     background:rgba(22,27,34,.92);color:var(--muted2);
     border-radius:20px;white-space:nowrap;cursor:pointer;
     backdrop-filter:blur(6px);transition:all .15s;
@@ -337,14 +337,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     padding:0 16px 10px;flex-shrink:0;
   }
   .sheet-count{
-    font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;
+    font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.3rem;
     color:var(--accent);letter-spacing:.04em;
   }
-  .sheet-count span{font-size:.6rem;font-weight:400;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-left:4px;}
+  .sheet-count span{font-size:.72rem;font-weight:400;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-left:4px;}
   .sheet-filter-btn{
-    font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;
+    font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;
     letter-spacing:.1em;text-transform:uppercase;
-    padding:5px 12px;border:1px solid var(--border);
+    padding:9px 16px;border:1px solid var(--border);
     background:transparent;color:var(--muted);border-radius:3px;cursor:pointer;
   }
   .sheet-filter-btn.active{border-color:var(--accent);color:var(--accent);}
@@ -358,27 +358,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
   /* Gym row in sheet */
   .sgi{
-    display:flex;align-items:center;gap:10px;
-    padding:11px 16px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:12px;
+    padding:15px 16px;border-bottom:1px solid var(--border);
     cursor:pointer;-webkit-tap-highlight-color:transparent;
     transition:background .1s;
   }
   .sgi:active{background:var(--surface2);}
-  .sgi-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .sgi-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
   .sgi-body{flex:1;min-width:0;}
   .sgi-name{
     font-family:'Barlow Condensed',sans-serif;font-weight:700;
-    font-size:.9rem;text-transform:uppercase;letter-spacing:.03em;
+    font-size:1.12rem;text-transform:uppercase;letter-spacing:.03em;line-height:1.2;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  .sgi-sub{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:1px;}
-  .sgi-dots{display:flex;gap:3px;margin-top:4px;}
-  .sgi-d{width:7px;height:7px;border-radius:50%;}
+  .sgi-sub{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+  .sgi-dots{display:flex;gap:4px;margin-top:7px;}
+  .sgi-d{width:9px;height:9px;border-radius:50%;}
   .sgi-badge{
-    font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:900;
-    padding:2px 7px;border-radius:2px;white-space:nowrap;flex-shrink:0;
+    font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;
+    padding:4px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0;
   }
-  .sgi-arrow{color:var(--muted2);font-size:.8rem;flex-shrink:0;}
+  .sgi-arrow{color:var(--muted2);font-size:1.3rem;flex-shrink:0;}
 
   /* ── MOBILE DETAIL PANEL (slides up over sheet) ── */
   .mobile-detail{
@@ -398,13 +398,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     flex-shrink:0;
   }
   .md-back{
-    background:none;border:none;color:var(--muted);font-size:1.2rem;
-    cursor:pointer;padding:2px 8px 2px 0;line-height:1;
+    background:none;border:none;color:var(--muted);font-size:1.5rem;
+    cursor:pointer;padding:8px 14px 8px 0;line-height:1;
     -webkit-tap-highlight-color:transparent;
   }
   .md-back:active{color:var(--accent);}
   .md-title{
-    font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;
+    font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.25rem;
     text-transform:uppercase;letter-spacing:.04em;flex:1;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
@@ -424,24 +424,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   }
   .mobile-filter-drawer.show{transform:translateY(0);}
   .mfd-title{
-    font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;
+    font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700;
     letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;
   }
-  .mfd-section{margin-bottom:14px;}
-  .mfd-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+  .mfd-section{margin-bottom:18px;}
+  .mfd-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
   .mfd-chip{
-    font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;
+    font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;
     letter-spacing:.08em;text-transform:uppercase;
-    padding:5px 12px;border:1px solid var(--border);
+    padding:9px 16px;border:1px solid var(--border);
     background:transparent;color:var(--muted2);border-radius:20px;cursor:pointer;
     -webkit-tap-highlight-color:transparent;
   }
   .mfd-chip.on{background:var(--accent);color:#000;border-color:var(--accent);}
   .mfd-close{
     width:100%;margin-top:10px;
-    font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;
+    font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:700;
     letter-spacing:.1em;text-transform:uppercase;
-    padding:12px;border:1px solid var(--border);
+    padding:15px;border:1px solid var(--border);
     background:var(--surface);color:var(--text);border-radius:4px;cursor:pointer;
   }
   .drawer-overlay{
@@ -449,6 +449,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     background:rgba(0,0,0,.5);display:none;
   }
   .drawer-overlay.show{display:block;}
+
+  /* ── DETAIL PANEL TYPE SCALE (overrides shared desktop .mpc-* sizes) ── */
+  .mobile-detail .mpc-sec{font-size:.72rem;letter-spacing:.18em;margin:18px 0 10px;}
+  .mobile-detail .mpc-stations{gap:8px 6px;}
+  .mobile-detail .mps{font-size:.88rem;padding:4px 0;gap:7px;}
+  .mobile-detail .mpsd{width:10px;height:10px;}
+  .mobile-detail .mpc-addr{font-size:.92rem;line-height:1.6;}
+  .mobile-detail .mpc-hrs{font-size:.85rem;}
+  .mobile-detail .mpc-contact{font-size:.88rem;}
+  .mobile-detail .mpc-notes{font-size:.85rem;line-height:1.7;padding-top:14px;margin-top:14px;}
+  .mobile-detail .mpc-unverified-msg{font-size:.85rem;line-height:1.7;}
+  .mobile-detail .mpc-status-badge{font-size:.7rem;padding:4px 10px;}
+  .mobile-detail .mptag{font-size:.7rem;padding:4px 9px;}
+  .mobile-detail .mpc-status-row{gap:8px;}
+  #md-badge{font-size:1rem;padding:4px 10px;}
+
+  /* Respect iPhone home-indicator safe area */
+  .sheet-gym-list{padding-bottom:env(safe-area-inset-bottom);}
+  .md-scroll{padding-bottom:calc(40px + env(safe-area-inset-bottom));}
+  .mobile-filter-drawer{padding-bottom:calc(16px + env(safe-area-inset-bottom));}
 
   /* Hide desktop popup on mobile */
   .map-popup-card{display:none!important;}
@@ -463,7 +483,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.7</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.8</div>
   </div>
   <div class="header-stats">
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">+ Submit/Verify a Gym</a>
@@ -879,8 +899,12 @@ function renderMapMarkers(){
   filtered.forEach(g=>{
     const marker=L.marker([g.lat,g.lng],{icon:createMarkerIcon(g)});
     marker.on('click',function(){
-      showPopupForGym(g);
-      highlightGym(g.id);
+      if(isMobile()){
+        openMobileDetail(g.id,true);
+      } else {
+        showPopupForGym(g);
+        highlightGym(g.id);
+      }
     });
     markerMap[g.id]=marker;
     clusterGroup.addLayer(marker);
@@ -1243,12 +1267,12 @@ function renderMobileSheet(){
 }
 
 // ── Open mobile gym detail ──
-function openMobileDetail(id){
+function openMobileDetail(id,fromMarker){
   const g=gyms.find(x=>x.id===id);
   if(!g) return;
 
-  // Fly map to gym
-  map.setView([g.lat,g.lng],15,{animate:true});
+  // Fly map to gym (skip when tapped directly on the map — avoids a jarring jump)
+  if(!fromMarker) map.setView([g.lat,g.lng],15,{animate:true});
 
   // Populate detail panel
   const c=cc(g);
@@ -1341,8 +1365,15 @@ function mobileClearFilters(){
 }
 
 // ── Init mobile UI ──
+let mobileInited=false;
+
 function initMobile(){
   if(!isMobile()) return;
+
+  // Already wired up — just refresh the list. Re-running the DOM moves and
+  // initSheetDrag() on every resize stacks duplicate touch listeners and
+  // progressively breaks the drag handle.
+  if(mobileInited){renderMobileSheet();return;}
 
   // Show mobile elements
   document.getElementById('mobile-filters').style.display='flex';
@@ -1360,6 +1391,7 @@ function initMobile(){
   main.appendChild(document.getElementById('mobile-filter-drawer'));
 
   initSheetDrag();
+  mobileInited=true;
   renderMobileSheet();
 
   // Map markers open detail directly on mobile
@@ -1615,9 +1647,30 @@ async function manualRefresh(){
   }
 }
 
+// Debounced resize. On mobile, resize fires constantly as the browser address
+// bar hides/shows, so this must be cheap and must not re-wire listeners.
+let _resizeTimer=null;
 window.addEventListener('resize',function(){
-  if(isMobile()){initMobile();}
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(function(){
+    if(isMobile()){
+      initMobile();
+    } else if(mobileInited){
+      teardownMobile();
+    }
+    if(map) map.invalidateSize();
+  },200);
 });
+
+// Rotating to landscape / resizing past the breakpoint: hide the mobile chrome
+// so it doesn't sit on top of the desktop layout.
+function teardownMobile(){
+  ['mobile-filters','mobile-sheet','mobile-detail','mobile-filter-drawer','drawer-overlay']
+    .forEach(id=>{const el=document.getElementById(id);if(el) el.style.display='none';});
+  mobileInited=false;
+  closeMobileDetail();
+  if(drawerOpen) toggleFilterDrawer();
+}
 
 // Kick things off
 boot();
