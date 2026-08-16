@@ -70,7 +70,7 @@
 </script>
 
 <!-- ── External CSS (unchanged) ── -->
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
@@ -83,6 +83,21 @@
   --blue:#4da6ff; --verified:#00e676; --unverified:#ff3d00;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
+
+/* ── JP TYPOGRAPHY ── Barlow has no kana/kanji; Noto Sans JP fills the gap. */
+html.jp body,html.jp .logo-sub,html.jp .mpc-addr,html.jp .mpc-notes,html.jp .l-notes,html.jp .mpc-hrs{font-family:'Barlow','Noto Sans JP',sans-serif;}
+html.jp .logo-name,html.jp .fl,html.jp .fb,html.jp .vtab,html.jp .list-th,html.jp .l-name,html.jp .l-badge,html.jp .gi-name,html.jp .gi-sbadge,html.jp .mpc-name,html.jp .mpc-sec,html.jp .mfchip,html.jp .mfd-chip,html.jp .sgi-name,html.jp .md-title,html.jp .sfb,html.jp .stat-l,html.jp .hstat-l,html.jp .submit-btn-header,html.jp .mpc-status-badge{font-family:'Barlow Condensed','Noto Sans JP',sans-serif;}
+/* Japanese does not uppercase, and wide tracking hurts legibility in kana */
+html.jp .fl,html.jp .list-th,html.jp .stat-l,html.jp .hstat-l,html.jp .mpc-sec,html.jp .ml-title{letter-spacing:.08em;}
+
+/* ── LANGUAGE TOGGLE ── */
+.lang-toggle{display:inline-flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.lang-toggle button{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;
+  padding:9px 13px;background:transparent;color:var(--muted);border:none;cursor:pointer;transition:all .15s;line-height:1;
+}
+.lang-toggle button:hover{color:var(--accent);}
+.lang-toggle button.on{background:var(--accent);color:#000;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100vh;}
 
@@ -298,6 +313,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .header-stats{gap:10px;}
   .hstat{display:none;}
   .submit-btn-header{font-size:.7rem;padding:8px 14px;}
+  .lang-toggle button{font-size:.62rem;padding:7px 9px;letter-spacing:.06em;}
 
   /* Map fills everything below header */
   .main{position:relative;overflow:hidden;}
@@ -505,68 +521,72 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.9</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · v5.1</div>
   </div>
   <div class="header-stats">
-    <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">+ Submit/Verify a Gym</a>
-    <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" title="Refetch data from Google Sheets">↻ Refresh</button>
-    <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l">Mapped Gyms</div></div>
-    <div class="hstat"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l">Official</div></div>
-    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l">HYROX® Ready</div></div>
-    <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l">Verified</div></div>
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="en" onclick="setLang('en')">EN</button>
+      <button data-lang="jp" onclick="setLang('jp')">JP</button>
+    </div>
+    <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer" data-i18n="btn_submit">+ Submit/Verify a Gym</a>
+    <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" data-i18n-title="btn_refresh_title" data-i18n="btn_refresh">↻ Refresh</button>
+    <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l" data-i18n="stat_mapped">Mapped Gyms</div></div>
+    <div class="hstat"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
+    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
+    <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l" data-i18n="stat_verified">Verified</div></div>
   </div>
 </div>
 
 <!-- FILTER BAR -->
 <div class="filterbar">
-  <button class="fb-clear" onclick="clearAllFilters()">✕ Clear</button>
+  <button class="fb-clear" onclick="clearAllFilters()" data-i18n="f_clear">✕ Clear</button>
   <div class="fsep"></div>
-  <span class="fl">Type</span>
+  <span class="fl" data-i18n="f_type">Type</span>
   <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="type" data-val="all" onclick="setTopFilter('type','all',this)">All</button>
-    <button class="fb" data-group="type" data-val="official" onclick="setTopFilter('type','official',this)">Official</button>
-    <button class="fb" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)">HYROX® Ready</button>
+    <button class="fb on" data-group="type" data-val="all" onclick="setTopFilter('type','all',this)" data-i18n="f_all">All</button>
+    <button class="fb" data-group="type" data-val="official" onclick="setTopFilter('type','official',this)" data-i18n="f_official">Official</button>
+    <button class="fb" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
   </div>
   <div class="fsep"></div>
-  <span class="fl">Region</span>
+  <span class="fl" data-i18n="f_region">Region</span>
   <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="region" data-val="all" onclick="setTopFilter('region','all',this)">All</button>
-    <button class="fb" data-group="region" data-val="Tokyo-to" onclick="setTopFilter('region','Tokyo-to',this)">Tokyo</button>
-    <button class="fb" data-group="region" data-val="Kanagawa-ken" onclick="setTopFilter('region','Kanagawa-ken',this)">Kanagawa</button>
-    <button class="fb" data-group="region" data-val="Saitama-ken" onclick="setTopFilter('region','Saitama-ken',this)">Saitama</button>
-    <button class="fb" data-group="region" data-val="Chiba-ken" onclick="setTopFilter('region','Chiba-ken',this)">Chiba</button>
+    <button class="fb on" data-group="region" data-val="all" onclick="setTopFilter('region','all',this)" data-i18n="f_all">All</button>
+    <button class="fb" data-group="region" data-val="Tokyo-to" onclick="setTopFilter('region','Tokyo-to',this)" data-i18n="r_tokyo">Tokyo</button>
+    <button class="fb" data-group="region" data-val="Kanagawa-ken" onclick="setTopFilter('region','Kanagawa-ken',this)" data-i18n="r_kanagawa">Kanagawa</button>
+    <button class="fb" data-group="region" data-val="Saitama-ken" onclick="setTopFilter('region','Saitama-ken',this)" data-i18n="r_saitama">Saitama</button>
+    <button class="fb" data-group="region" data-val="Chiba-ken" onclick="setTopFilter('region','Chiba-ken',this)" data-i18n="r_chiba">Chiba</button>
   </div>
   <div class="fsep"></div>
-  <span class="fl">Area</span>
+  <span class="fl" data-i18n="f_area">Area</span>
   <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="area" data-val="all" onclick="setTopFilter('area','all',this)">All</button>
-    <button class="fb" data-group="area" data-val="central" onclick="setTopFilter('area','central',this)">Central</button>
-    <button class="fb" data-group="area" data-val="west" onclick="setTopFilter('area','west',this)">West</button>
-    <button class="fb" data-group="area" data-val="east" onclick="setTopFilter('area','east',this)">East</button>
-    <button class="fb" data-group="area" data-val="south" onclick="setTopFilter('area','south',this)">South</button>
-    <button class="fb" data-group="area" data-val="north" onclick="setTopFilter('area','north',this)">North</button>
+    <button class="fb on" data-group="area" data-val="all" onclick="setTopFilter('area','all',this)" data-i18n="f_all">All</button>
+    <button class="fb" data-group="area" data-val="central" onclick="setTopFilter('area','central',this)" data-i18n="a_central">Central</button>
+    <button class="fb" data-group="area" data-val="west" onclick="setTopFilter('area','west',this)" data-i18n="a_west">West</button>
+    <button class="fb" data-group="area" data-val="east" onclick="setTopFilter('area','east',this)" data-i18n="a_east">East</button>
+    <button class="fb" data-group="area" data-val="south" onclick="setTopFilter('area','south',this)" data-i18n="a_south">South</button>
+    <button class="fb" data-group="area" data-val="north" onclick="setTopFilter('area','north',this)" data-i18n="a_north">North</button>
   </div>
   <div class="fsep"></div>
-  <span class="fl">Language</span>
+  <span class="fl" data-i18n="f_lang">Language</span>
   <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="lang" data-val="all" onclick="setTopFilter('lang','all',this)">All</button>
+    <button class="fb on" data-group="lang" data-val="all" onclick="setTopFilter('lang','all',this)" data-i18n="f_all">All</button>
     <button class="fb" data-group="lang" data-val="EN" onclick="setTopFilter('lang','EN',this)">EN</button>
     <button class="fb" data-group="lang" data-val="JP" onclick="setTopFilter('lang','JP',this)">JP</button>
     <button class="fb" data-group="lang" data-val="EN/JP" onclick="setTopFilter('lang','EN/JP',this)">EN/JP</button>
   </div>
   <div class="fsep"></div>
-  <span class="fl">Status</span>
+  <span class="fl" data-i18n="f_status">Status</span>
   <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="status" data-val="all" onclick="setTopFilter('status','all',this)">All</button>
-    <button class="fb" data-group="status" data-val="verified" onclick="setTopFilter('status','verified',this)">Verified</button>
-    <button class="fb" data-group="status" data-val="unverified" onclick="setTopFilter('status','unverified',this)">Unverified</button>
+    <button class="fb on" data-group="status" data-val="all" onclick="setTopFilter('status','all',this)" data-i18n="f_all">All</button>
+    <button class="fb" data-group="status" data-val="verified" onclick="setTopFilter('status','verified',this)" data-i18n="s_verified">Verified</button>
+    <button class="fb" data-group="status" data-val="unverified" onclick="setTopFilter('status','unverified',this)" data-i18n="s_unverified">Unverified</button>
   </div>
 </div>
 
 <!-- VIEW TAB BAR -->
 <div class="view-tabbar">
-  <button class="vtab active" onclick="switchView('map',this)">🗺 Map View</button>
-  <button class="vtab" onclick="switchView('list',this)">☰ List View</button>
+  <button class="vtab active" onclick="switchView('map',this)" data-i18n="tab_map">🗺 Map View</button>
+  <button class="vtab" onclick="switchView('list',this)" data-i18n="tab_list">☰ List View</button>
 </div>
 
 <!-- MAIN -->
@@ -585,10 +605,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
         <div class="mpc-area" id="pc-area"></div>
         <div class="mpc-status-row" id="pc-status-row"></div>
         <div id="pc-station-section">
-          <div class="mpc-sec">Station Coverage</div>
+          <div class="mpc-sec" data-i18n="sec_stations">Station Coverage</div>
           <div class="mpc-stations" id="pc-stations"></div>
         </div>
-        <div class="mpc-sec">Location & Hours</div>
+        <div class="mpc-sec" data-i18n="sec_location">Location &amp; Hours</div>
         <div class="mpc-addr" id="pc-addr"></div>
         <div class="mpc-hrs" id="pc-hrs"></div>
         <div class="mpc-directions" id="pc-directions"></div>
@@ -601,18 +621,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
     <!-- LEGEND -->
     <div class="map-legend">
-      <div class="ml-title">Station Coverage</div>
-      <div class="ml-row"><div class="ml-dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></div>8/8 — Full Race Sim</div>
-      <div class="ml-row"><div class="ml-dot" style="background:#ff9100;box-shadow:0 0 5px #ff9100"></div>6–7/8 — Near Complete</div>
-      <div class="ml-row"><div class="ml-dot" style="background:#ff6600;box-shadow:0 0 5px #ff6600"></div>4–5/8 — Partial</div>
-      <div class="ml-row"><div class="ml-dot" style="background:#ff3d00;box-shadow:0 0 5px #ff3d00"></div>1–3/8 — Limited</div>
-      <div class="ml-row"><div class="ml-dot" style="background:#484f58"></div>Unverified — TBC</div>
+      <div class="ml-title" data-i18n="sec_stations">Station Coverage</div>
+      <div class="ml-row"><div class="ml-dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></div><span data-i18n="leg_8">8/8 — Full Race Sim</span></div>
+      <div class="ml-row"><div class="ml-dot" style="background:#ff9100;box-shadow:0 0 5px #ff9100"></div><span data-i18n="leg_67">6–7/8 — Near Complete</span></div>
+      <div class="ml-row"><div class="ml-dot" style="background:#ff6600;box-shadow:0 0 5px #ff6600"></div><span data-i18n="leg_45">4–5/8 — Partial</span></div>
+      <div class="ml-row"><div class="ml-dot" style="background:#ff3d00;box-shadow:0 0 5px #ff3d00"></div><span data-i18n="leg_13">1–3/8 — Limited</span></div>
+      <div class="ml-row"><div class="ml-dot" style="background:#484f58"></div><span data-i18n="leg_tbc">Unverified — TBC</span></div>
       <div class="ml-sep"></div>
-      <div class="ml-row"><div class="ml-sq" style="background:var(--accent)"></div>★ Official</div>
-      <div class="ml-row"><div class="ml-sq" style="background:var(--blue)"></div>HYROX® Ready</div>
+      <div class="ml-row"><div class="ml-sq" style="background:var(--accent)"></div><span data-i18n="badge_official">★ Official</span></div>
+      <div class="ml-row"><div class="ml-sq" style="background:var(--blue)"></div><span data-i18n="f_ready">HYROX® Ready</span></div>
       <div class="ml-sep"></div>
-      <div class="ml-row"><div class="ml-dot" style="background:var(--verified);width:8px;height:8px"></div>Verified</div>
-      <div class="ml-row"><div class="ml-dot" style="background:var(--unverified);width:8px;height:8px"></div>Unverified</div>
+      <div class="ml-row"><div class="ml-dot" style="background:var(--verified);width:8px;height:8px"></div><span data-i18n="s_verified">Verified</span></div>
+      <div class="ml-row"><div class="ml-dot" style="background:var(--unverified);width:8px;height:8px"></div><span data-i18n="s_unverified">Unverified</span></div>
     </div>
   </div>
 
@@ -621,15 +641,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <table class="list-table">
       <thead>
         <tr>
-          <th class="list-th">Gym</th>
-          <th class="list-th">Coverage</th>
-          <th class="list-th">Stations</th>
-          <th class="list-th">Type</th>
-          <th class="list-th">Status</th>
-          <th class="list-th">Language</th>
-          <th class="list-th">Region</th>
-          <th class="list-th">Notes</th>
-          <th class="list-th">Tags</th>
+          <th class="list-th" data-i18n="th_gym">Gym</th>
+          <th class="list-th" data-i18n="th_coverage">Coverage</th>
+          <th class="list-th" data-i18n="th_stations">Stations</th>
+          <th class="list-th" data-i18n="f_type">Type</th>
+          <th class="list-th" data-i18n="f_status">Status</th>
+          <th class="list-th" data-i18n="f_lang">Language</th>
+          <th class="list-th" data-i18n="f_region">Region</th>
+          <th class="list-th" data-i18n="th_notes">Notes</th>
+          <th class="list-th" data-i18n="th_tags">Tags</th>
         </tr>
       </thead>
       <tbody id="list-tbody"></tbody>
@@ -639,17 +659,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sb-filter">
-      <button class="sfb on" onclick="setSbFilter('all',this)">All</button>
+      <button class="sfb on" onclick="setSbFilter('all',this)" data-i18n="f_all">All</button>
       <button class="sfb" onclick="setSbFilter('full',this)">8/8</button>
       <button class="sfb" onclick="setSbFilter('partial',this)">4–7</button>
       <button class="sfb" onclick="setSbFilter('limited',this)">1–3</button>
-      <button class="sfb" onclick="setSbFilter('unverified',this)">TBC</button>
+      <button class="sfb" onclick="setSbFilter('unverified',this)" data-i18n="cov_tbc">TBC</button>
     </div>
     <div class="panel" id="panel-gyms"></div>
     <div class="stats-bar">
-      <div class="stat"><div class="stat-n" id="s-total">41</div><div class="stat-l">Shown</div></div>
-      <div class="stat"><div class="stat-n g" id="s-verified">10</div><div class="stat-l">Verified</div></div>
-      <div class="stat"><div class="stat-n r" id="s-unverified">31</div><div class="stat-l">Unverified</div></div>
+      <div class="stat"><div class="stat-n" id="s-total">41</div><div class="stat-l" data-i18n="stat_shown">Shown</div></div>
+      <div class="stat"><div class="stat-n g" id="s-verified">10</div><div class="stat-l" data-i18n="s_verified">Verified</div></div>
+      <div class="stat"><div class="stat-n r" id="s-unverified">31</div><div class="stat-l" data-i18n="s_unverified">Unverified</div></div>
     </div>
   </div>
 </div>
@@ -657,12 +677,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
 <!-- MOBILE: Filter chips overlay -->
 <div class="mobile-filters" id="mobile-filters" style="display:none;">
-  <button class="mfchip clear-chip" onclick="mobileClearFilters()">✕ Clear</button>
-  <button class="mfchip on" data-mgroup="type" data-mval="all" onclick="setMobileFilter('type','all',this)">All</button>
-  <button class="mfchip" data-mgroup="type" data-mval="official" onclick="setMobileFilter('type','official',this)">★ Official</button>
-  <button class="mfchip" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)">HYROX® Ready</button>
-  <button class="mfchip on" data-mgroup="status" data-mval="all" onclick="setMobileFilter('status','all',this)">All Status</button>
-  <button class="mfchip" data-mgroup="status" data-mval="verified" onclick="setMobileFilter('status','verified',this)">✓ Verified</button>
+  <button class="mfchip clear-chip" onclick="mobileClearFilters()" data-i18n="f_clear">✕ Clear</button>
+  <button class="mfchip on" data-mgroup="type" data-mval="all" onclick="setMobileFilter('type','all',this)" data-i18n="f_all">All</button>
+  <button class="mfchip" data-mgroup="type" data-mval="official" onclick="setMobileFilter('type','official',this)" data-i18n="badge_official">★ Official</button>
+  <button class="mfchip" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
+  <button class="mfchip on" data-mgroup="status" data-mval="all" onclick="setMobileFilter('status','all',this)" data-i18n="m_all_status">All Status</button>
+  <button class="mfchip" data-mgroup="status" data-mval="verified" onclick="setMobileFilter('status','verified',this)" data-i18n="badge_verified">✓ Verified</button>
 </div>
 
 <!-- MOBILE: Bottom sheet -->
@@ -671,8 +691,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <div class="sheet-handle"></div>
   </div>
   <div class="sheet-header">
-    <div class="sheet-count"><span id="mobile-count">41</span> <span>gyms</span></div>
-    <button class="sheet-filter-btn" id="sheet-filter-btn" onclick="toggleFilterDrawer()">⚙ Filters</button>
+    <div class="sheet-count"><span id="mobile-count">41</span> <span data-i18n="m_gyms">gyms</span></div>
+    <button class="sheet-filter-btn" id="sheet-filter-btn" onclick="toggleFilterDrawer()" data-i18n="m_filters">⚙ Filters</button>
   </div>
   <div class="sheet-gym-list" id="sheet-gym-list"></div>
 </div>
@@ -680,7 +700,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <!-- MOBILE: Gym detail panel -->
 <div class="mobile-detail" id="mobile-detail" style="display:none;">
   <div class="md-topbar">
-    <button class="md-back" onclick="closeMobileDetail()">← Back</button>
+    <button class="md-back" onclick="closeMobileDetail()" data-i18n="m_back">← Back</button>
     <div class="md-title" id="md-title"></div>
     <span class="mpc-badge" id="md-badge" style="flex-shrink:0;"></span>
   </div>
@@ -694,61 +714,194 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
 <!-- MOBILE: Filter drawer -->
 <div class="mobile-filter-drawer" id="mobile-filter-drawer" style="display:none;">
-  <div class="mfd-title">Filter Gyms</div>
+  <div class="mfd-title" data-i18n="m_filter_title">Filter Gyms</div>
 
   <div class="mfd-section">
-    <div class="mfd-title">Type</div>
+    <div class="mfd-title" data-i18n="f_type">Type</div>
     <div class="mfd-chips">
-      <button class="mfd-chip on" data-dgroup="type" data-dval="all" onclick="setDrawerFilter('type','all',this)">All</button>
-      <button class="mfd-chip" data-dgroup="type" data-dval="official" onclick="setDrawerFilter('type','official',this)">★ Official</button>
-      <button class="mfd-chip" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)">HYROX® Ready</button>
+      <button class="mfd-chip on" data-dgroup="type" data-dval="all" onclick="setDrawerFilter('type','all',this)" data-i18n="f_all">All</button>
+      <button class="mfd-chip" data-dgroup="type" data-dval="official" onclick="setDrawerFilter('type','official',this)" data-i18n="badge_official">★ Official</button>
+      <button class="mfd-chip" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
     </div>
   </div>
 
   <div class="mfd-section">
-    <div class="mfd-title">Region</div>
+    <div class="mfd-title" data-i18n="f_region">Region</div>
     <div class="mfd-chips">
-      <button class="mfd-chip on" data-dgroup="region" data-dval="all" onclick="setDrawerFilter('region','all',this)">All</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Tokyo-to" onclick="setDrawerFilter('region','Tokyo-to',this)">Tokyo</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Kanagawa-ken" onclick="setDrawerFilter('region','Kanagawa-ken',this)">Kanagawa</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Saitama-ken" onclick="setDrawerFilter('region','Saitama-ken',this)">Saitama</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Chiba-ken" onclick="setDrawerFilter('region','Chiba-ken',this)">Chiba</button>
+      <button class="mfd-chip on" data-dgroup="region" data-dval="all" onclick="setDrawerFilter('region','all',this)" data-i18n="f_all">All</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="Tokyo-to" onclick="setDrawerFilter('region','Tokyo-to',this)" data-i18n="r_tokyo">Tokyo</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="Kanagawa-ken" onclick="setDrawerFilter('region','Kanagawa-ken',this)" data-i18n="r_kanagawa">Kanagawa</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="Saitama-ken" onclick="setDrawerFilter('region','Saitama-ken',this)" data-i18n="r_saitama">Saitama</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="Chiba-ken" onclick="setDrawerFilter('region','Chiba-ken',this)" data-i18n="r_chiba">Chiba</button>
     </div>
   </div>
 
   <div class="mfd-section">
-    <div class="mfd-title">Coverage</div>
+    <div class="mfd-title" data-i18n="th_coverage">Coverage</div>
     <div class="mfd-chips">
-      <button class="mfd-chip on" data-dgroup="sb" data-dval="all" onclick="setDrawerFilter('sb','all',this)">All</button>
-      <button class="mfd-chip" data-dgroup="sb" data-dval="full" onclick="setDrawerFilter('sb','full',this)">8/8 Full</button>
+      <button class="mfd-chip on" data-dgroup="sb" data-dval="all" onclick="setDrawerFilter('sb','all',this)" data-i18n="f_all">All</button>
+      <button class="mfd-chip" data-dgroup="sb" data-dval="full" onclick="setDrawerFilter('sb','full',this)" data-i18n="cov_full">8/8 Full</button>
       <button class="mfd-chip" data-dgroup="sb" data-dval="partial" onclick="setDrawerFilter('sb','partial',this)">4–7</button>
       <button class="mfd-chip" data-dgroup="sb" data-dval="limited" onclick="setDrawerFilter('sb','limited',this)">1–3</button>
-      <button class="mfd-chip" data-dgroup="sb" data-dval="unverified" onclick="setDrawerFilter('sb','unverified',this)">TBC</button>
+      <button class="mfd-chip" data-dgroup="sb" data-dval="unverified" onclick="setDrawerFilter('sb','unverified',this)" data-i18n="cov_tbc">TBC</button>
     </div>
   </div>
 
   <div class="mfd-section">
-    <div class="mfd-title">Status</div>
+    <div class="mfd-title" data-i18n="f_status">Status</div>
     <div class="mfd-chips">
-      <button class="mfd-chip on" data-dgroup="status" data-dval="all" onclick="setDrawerFilter('status','all',this)">All</button>
-      <button class="mfd-chip" data-dgroup="status" data-dval="verified" onclick="setDrawerFilter('status','verified',this)">✓ Verified</button>
-      <button class="mfd-chip" data-dgroup="status" data-dval="unverified" onclick="setDrawerFilter('status','unverified',this)">Unverified</button>
+      <button class="mfd-chip on" data-dgroup="status" data-dval="all" onclick="setDrawerFilter('status','all',this)" data-i18n="f_all">All</button>
+      <button class="mfd-chip" data-dgroup="status" data-dval="verified" onclick="setDrawerFilter('status','verified',this)" data-i18n="badge_verified">✓ Verified</button>
+      <button class="mfd-chip" data-dgroup="status" data-dval="unverified" onclick="setDrawerFilter('status','unverified',this)" data-i18n="s_unverified">Unverified</button>
     </div>
   </div>
 
-  <button class="mfd-close" onclick="toggleFilterDrawer()">Done</button>
+  <button class="mfd-close" onclick="toggleFilterDrawer()" data-i18n="m_done">Done</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script>
 const SNAMES=['SkiErg','Sled Push','Sled Pull','Row','Burpee BJ','Farmers Carry','Sandbag Lunges','Wall Balls'];
+const SNAMES_JP=['スキーエルグ','スレッドプッシュ','スレッドプル','ローイング','バーピージャンプ','ファーマーズキャリー','サンドバッグランジ','ウォールボール'];
+
+// ════════════════════════════════════════════════════════════
+// i18n — UI language layer (separate from the gym "spoken language" filter)
+// ════════════════════════════════════════════════════════════
+const LANG_KEY='gymready_lang';
+const I18N={
+  en:{
+    btn_submit:'+ Submit/Verify a Gym',
+    btn_refresh:'↻ Refresh',
+    btn_refresh_title:'Refetch data from Google Sheets',
+    stat_mapped:'Mapped Gyms', stat_official:'Official', stat_ready:'HYROX® Ready',
+    stat_verified:'Verified', stat_shown:'Shown',
+    f_clear:'✕ Clear', f_type:'Type', f_region:'Region', f_area:'Area',
+    f_lang:'Language', f_status:'Status', f_all:'All',
+    f_official:'Official', f_ready:'HYROX® Ready',
+    r_tokyo:'Tokyo', r_kanagawa:'Kanagawa', r_saitama:'Saitama', r_chiba:'Chiba',
+    a_central:'Central', a_west:'West', a_east:'East', a_south:'South', a_north:'North',
+    s_verified:'Verified', s_unverified:'Unverified',
+    tab_map:'🗺 Map View', tab_list:'☰ List View',
+    leg_8:'8/8 — Full Race Sim', leg_67:'6–7/8 — Near Complete',
+    leg_45:'4–5/8 — Partial', leg_13:'1–3/8 — Limited', leg_tbc:'Unverified — TBC',
+    th_gym:'Gym', th_coverage:'Coverage', th_stations:'Stations', th_notes:'Notes', th_tags:'Tags',
+    cov_full:'8/8 Full', cov_tbc:'TBC',
+    sec_stations:'Station Coverage', sec_location:'Location & Hours',
+    badge_official:'★ Official', badge_verified:'✓ Verified',
+    msg_no_stations:'Station coverage not yet confirmed. Contact gym directly or check back after verification.',
+    msg_no_stations_short:'Station coverage not yet confirmed. Contact gym directly.',
+    lbl_hours:'Hours: ', val_hours_contact:'Contact gym directly',
+    btn_maps:'📍 Open in Google Maps',
+    lbl_tel:'Tel: ', lbl_email:'Email: ', lbl_web:'Web: ', lbl_visit:'Visit site', lbl_visit_site:'Visit website',
+    msg_no_notes:'No additional notes yet.',
+    lbl_last_verified:'Last verified: ',
+    m_gyms:'gyms', m_filters:'⚙ Filters', m_back:'← Back',
+    m_filter_title:'Filter Gyms', m_all_status:'All Status', m_done:'Done',
+    banner_fallback:'⚠ Live data unavailable — showing snapshot. ',
+    banner_refreshed:'✓ Refreshed — {n} gyms synced',
+    banner_refresh_failed:'⚠ Refresh failed: ',
+    doc_title:'HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo'
+  },
+  jp:{
+    btn_submit:'+ ジムを登録・確認',
+    btn_refresh:'↻ 更新',
+    btn_refresh_title:'Google スプレッドシートから再取得',
+    stat_mapped:'掲載ジム', stat_official:'公式', stat_ready:'HYROX®対応',
+    stat_verified:'確認済み', stat_shown:'表示中',
+    f_clear:'✕ クリア', f_type:'種別', f_region:'都県', f_area:'エリア',
+    f_lang:'対応言語', f_status:'確認状況', f_all:'すべて',
+    f_official:'公式', f_ready:'HYROX®対応',
+    r_tokyo:'東京', r_kanagawa:'神奈川', r_saitama:'埼玉', r_chiba:'千葉',
+    a_central:'都心', a_west:'西部', a_east:'東部', a_south:'南部', a_north:'北部',
+    s_verified:'確認済み', s_unverified:'未確認',
+    tab_map:'🗺 マップ', tab_list:'☰ リスト',
+    leg_8:'8/8 — フルレース対応', leg_67:'6–7/8 — ほぼ対応',
+    leg_45:'4–5/8 — 一部対応', leg_13:'1–3/8 — 限定的', leg_tbc:'未確認 — TBC',
+    th_gym:'ジム', th_coverage:'対応数', th_stations:'ステーション', th_notes:'備考', th_tags:'タグ',
+    cov_full:'8/8 フル', cov_tbc:'未確認',
+    sec_stations:'ステーション対応', sec_location:'所在地・営業時間',
+    badge_official:'★ 公式', badge_verified:'✓ 確認済み',
+    msg_no_stations:'ステーション対応状況は未確認です。ジムへ直接お問い合わせいただくか、確認後に再度ご覧ください。',
+    msg_no_stations_short:'ステーション対応状況は未確認です。ジムへ直接お問い合わせください。',
+    lbl_hours:'営業時間: ', val_hours_contact:'ジムへ直接お問い合わせください',
+    btn_maps:'📍 Google マップで開く',
+    lbl_tel:'電話: ', lbl_email:'メール: ', lbl_web:'ウェブ: ', lbl_visit:'サイトを見る', lbl_visit_site:'ウェブサイトを見る',
+    msg_no_notes:'追加情報はまだありません。',
+    lbl_last_verified:'最終確認: ',
+    m_gyms:'件', m_filters:'⚙ 絞り込み', m_back:'← 戻る',
+    m_filter_title:'ジムを絞り込む', m_all_status:'すべての状況', m_done:'完了',
+    banner_fallback:'⚠ 最新データを取得できません — 保存済みデータを表示中。',
+    banner_refreshed:'✓ 更新完了 — {n}件のジムを同期しました',
+    banner_refresh_failed:'⚠ 更新に失敗しました: ',
+    doc_title:'HYROX ジムマップ | 東京のHYROX対応ジムを探す'
+  }
+};
+
+let UI_LANG=(function(){try{return localStorage.getItem(LANG_KEY)==='jp'?'jp':'en';}catch(e){return 'en';}})();
+
+function t(k){
+  const d=I18N[UI_LANG]||I18N.en;
+  return d[k]!==undefined?d[k]:(I18N.en[k]!==undefined?I18N.en[k]:k);
+}
+
+// Localised gym field with EN fallback — a blank JP cell never blanks the UI.
+function L(g,f){
+  if(UI_LANG==='jp'){
+    const v=g[f+'_jp'];
+    if(v&&String(v).trim()!=='') return String(v).trim();
+  }
+  return g[f]||'';
+}
+function gname(g){return L(g,'name');}
+function gward(g){return L(g,'ward');}
+function gaddr(g){return L(g,'address');}
+function ghours(g){return L(g,'hours');}
+function gnotes(g){return L(g,'notes');}
+function gtags(g){
+  if(UI_LANG==='jp'&&Array.isArray(g.tags_jp)&&g.tags_jp.length) return g.tags_jp;
+  return g.tags||[];
+}
+function snames(){return UI_LANG==='jp'?SNAMES_JP:SNAMES;}
+const PREF_JP={'Tokyo':'東京','Kanagawa':'神奈川','Saitama':'埼玉','Chiba':'千葉'};
+function prefLabel(g){
+  const raw=(g.prefecture||'').replace('-to','').replace('-ken','');
+  return UI_LANG==='jp'?(PREF_JP[raw]||raw):raw;
+}
+// Google Maps resolves Japanese addresses well; always pair with the EN name for reliability.
+function mapsUrlFor(g){
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((g.name||'')+' '+gaddr(g));
+}
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.title=t(el.getAttribute('data-i18n-title'));});
+  document.title=t('doc_title');
+}
+
+function setLang(lang){
+  UI_LANG=(lang==='jp')?'jp':'en';
+  try{localStorage.setItem(LANG_KEY,UI_LANG);}catch(e){}
+  document.documentElement.lang=(UI_LANG==='jp')?'ja':'en';
+  document.documentElement.classList.toggle('jp',UI_LANG==='jp');
+  document.querySelectorAll('#lang-toggle button').forEach(b=>b.classList.toggle('on',b.dataset.lang===UI_LANG));
+  applyI18n();
+  if(typeof gyms!=='undefined'&&gyms.length){
+    renderGyms();
+    if(activeView==='list') renderList();
+    if(isMobile()) renderMobileSheet();
+    const md=document.getElementById('mobile-detail');
+    if(md&&md.classList.contains('show')&&activeGym!=null) openMobileDetail(activeGym,true);
+    else closePopup();
+  }
+}
+
 
 // ════════════════════════════════════════════════════════════
 // LIVE DATA SOURCE (Google Sheets → published CSV)
 // ════════════════════════════════════════════════════════════
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTQew4dwAt72b-hgXcxdQ2jd9L2vxW_5DdrnW6jUjLricxX0fbgnzI2tPoROw7GPg2kJ1bXKBHZbSEB/pub?output=csv';
-const CACHE_KEY='hyrox_gym_cache_v1';
+const CACHE_KEY='hyrox_gym_cache_v2';
 const CACHE_TTL_MS=5*60*1000;        // 5-minute cache
 const MAX_FETCH_RETRIES=3;
 const RETRY_DELAY_MS=1500;
@@ -833,7 +986,7 @@ function formatDate(s){
   if(!s) return '';
   const d=new Date(s);
   if(isNaN(d.getTime())) return s;
-  return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+  return d.toLocaleDateString(UI_LANG==='jp'?'ja-JP':'en-US',{year:'numeric',month:UI_LANG==='jp'?'numeric':'short',day:'numeric'});
 }
 
 // ── FILTERS ──
@@ -944,57 +1097,58 @@ function showPopupForGym(g){
   const card=document.getElementById('popup-card');
   const c=cc(g);
 
-  document.getElementById('pc-name').textContent=g.name;
+  document.getElementById('pc-name').textContent=gname(g);
   document.getElementById('pc-name').style.color=c;
 
   const badgeEl=document.getElementById('pc-badge');
   if(g.stations!==null){badgeEl.textContent=g.stations+'/8';badgeEl.className='mpc-badge '+pbc(g);}
   else{badgeEl.textContent='TBC';badgeEl.className='mpc-badge pbn';}
 
-  document.getElementById('pc-area').innerHTML=g.ward+' · '+g.prefecture;
+  document.getElementById('pc-area').innerHTML=gward(g)+' · '+prefLabel(g);
 
   let statusHTML='';
-  if(g.official) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>';
-  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
-  if(g.verified) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>';
-  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
+  if(g.official) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">'+t('badge_official')+'</span>';
+  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">'+t('f_ready')+'</span>';
+  if(g.verified) statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">'+t('badge_verified')+'</span>';
+  else statusHTML+='<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">'+t('s_unverified')+'</span>';
   if(g.lang) statusHTML+='<span class="lang-badge">'+g.lang+'</span>';
   document.getElementById('pc-status-row').innerHTML=statusHTML;
 
   const stSection=document.getElementById('pc-station-section');
   if(g.has){
     stSection.style.display='block';
-    document.getElementById('pc-stations').innerHTML=SNAMES.map((s,i)=>`
+    document.getElementById('pc-stations').innerHTML=snames().map((s,i)=>`
       <div class="mps"><div class="mpsd ${g.has[i]?'mpsy':'mpsn'}"></div><span class="${g.has[i]?'':'mpsm'}">${s}</span></div>`).join('');
   } else {
     stSection.style.display='block';
-    document.getElementById('pc-stations').innerHTML='<div class="mpc-unverified-msg">Station coverage not yet confirmed. Contact gym directly or check back after verification.</div>';
+    document.getElementById('pc-stations').innerHTML='<div class="mpc-unverified-msg">'+t('msg_no_stations')+'</div>';
   }
 
-  const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(g.name+' '+g.address);
-  document.getElementById('pc-addr').innerHTML='<a href="'+mapsUrl+'" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--muted2);">'+g.address+'</a>';
-  document.getElementById('pc-hrs').innerHTML=g.hours?'Hours: '+g.hours:'Hours: Contact gym directly';
-  document.getElementById('pc-directions').innerHTML='<a href="'+mapsUrl+'" target="_blank" class="mpc-directions-btn">📍 Open in Google Maps</a>';
+  const mapsUrl=mapsUrlFor(g);
+  document.getElementById('pc-addr').innerHTML='<a href="'+mapsUrl+'" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--muted2);">'+gaddr(g)+'</a>';
+  document.getElementById('pc-hrs').innerHTML=t('lbl_hours')+(ghours(g)||t('val_hours_contact'));
+  document.getElementById('pc-directions').innerHTML='<a href="'+mapsUrl+'" target="_blank" class="mpc-directions-btn">'+t('btn_maps')+'</a>';
 
   let contactHTML='';
-  if(g.phone) contactHTML+='Tel: '+g.phone+'<br>';
-  if(g.email) contactHTML+='Email: <a href="mailto:'+g.email+'">'+g.email+'</a><br>';
-  if(g.website&&g.website.startsWith('http')) contactHTML+='Web: <a href="'+g.website+'" target="_blank">Visit site</a><br>';
+  if(g.phone) contactHTML+=t('lbl_tel')+g.phone+'<br>';
+  if(g.email) contactHTML+=t('lbl_email')+'<a href="mailto:'+g.email+'">'+g.email+'</a><br>';
+  if(g.website&&g.website.startsWith('http')) contactHTML+=t('lbl_web')+'<a href="'+g.website+'" target="_blank">'+t('lbl_visit')+'</a><br>';
   if(g.instagram) contactHTML+='IG: @'+g.instagram+'<br>';
   document.getElementById('pc-contact').innerHTML=contactHTML;
 
   const notesEl=document.getElementById('pc-notes');
-  notesEl.textContent=g.notes||'No additional notes yet — put notes here.';
+  const nTxt=gnotes(g);
+  notesEl.textContent=nTxt||t('msg_no_notes');
   notesEl.style.display='block';
-  notesEl.style.opacity=g.notes?'1':'.5';
-  notesEl.style.fontStyle=g.notes?'normal':'italic';
+  notesEl.style.opacity=nTxt?'1':'.5';
+  notesEl.style.fontStyle=nTxt?'normal':'italic';
 
-  document.getElementById('pc-tags').innerHTML=g.tags.map(t=>`<span class="mptag">${t}</span>`).join('');
+  document.getElementById('pc-tags').innerHTML=gtags(g).map(x=>`<span class="mptag">${x}</span>`).join('');
 
   // Last verified date (below tags)
   const lvEl=document.getElementById('pc-last-verified');
   if(g.last_verified){
-    lvEl.textContent='Last verified: '+formatDate(g.last_verified);
+    lvEl.textContent=t('lbl_last_verified')+formatDate(g.last_verified);
     lvEl.style.display='block';
   } else {
     lvEl.style.display='none';
@@ -1025,21 +1179,21 @@ function renderGyms(){
       g.has.map(s=>`<div class="gd ${s?'gd-on':'gd-off'}"></div>`).join(''):
       Array(8).fill('<div class="gd gd-unk"></div>').join('');
     const officialBadge=g.official?
-      '<span class="gi-sbadge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>':
-      '<span class="gi-sbadge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
+      '<span class="gi-sbadge" style="border:1px solid var(--accent);color:var(--accent);">'+t('badge_official')+'</span>':
+      '<span class="gi-sbadge" style="border:1px solid var(--blue);color:var(--blue);">'+t('f_ready')+'</span>';
     const verifiedBadge=g.verified?
-      '<span class="gi-sbadge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>':
-      '<span class="gi-sbadge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
+      '<span class="gi-sbadge" style="border:1px solid var(--verified);color:var(--verified);">'+t('badge_verified')+'</span>':
+      '<span class="gi-sbadge" style="border:1px solid var(--unverified);color:var(--unverified);">'+t('s_unverified')+'</span>';
     const langBadge=g.lang?`<span class="lang-badge">${g.lang}</span>`:'';
     return `
     <div class="gym-item${activeGym===g.id?' active':''}" id="gi-${g.id}" onclick="selectGym(${g.id})">
       <div class="gi-dot" style="background:${cc(g)};box-shadow:0 0 7px ${cc(g)}90;margin-top:4px;"></div>
       <div class="gi-body">
         <div class="gi-top">
-          <div class="gi-name">${g.name}</div>
+          <div class="gi-name">${gname(g)}</div>
           <div class="gi-badge ${bc(g)}">${stationLabel}</div>
         </div>
-        <div class="gi-area">${g.ward} · ${g.prefecture.replace('-to','').replace('-ken','')}</div>
+        <div class="gi-area">${gward(g)} · ${prefLabel(g)}</div>
         <div class="gi-dots">${dotsHTML}</div>
         <div class="gi-status" style="flex-wrap:wrap;gap:4px;">${officialBadge}${verifiedBadge}${langBadge}</div>
       </div>
@@ -1108,18 +1262,18 @@ function renderList(){
     const dotsHTML=g.has?
       g.has.map(s=>`<div class="l-d" style="background:${s?'#00e676':'var(--muted2)'};${s?'box-shadow:0 0 4px #00e676':''}"></div>`).join(''):
       Array(8).fill('<div class="l-d" style="background:#2a2a2a;border:1px solid #4d545c"></div>').join('');
-    const tagsHTML=g.tags.map(t=>`<span class="l-tag">${t}</span>`).join('');
+    const tagsHTML=gtags(g).map(x=>`<span class="l-tag">${x}</span>`).join('');
     const typeBadge=g.official?
-      '<span class="l-badge lb-official">★ Official</span>':
-      '<span class="l-badge lb-ready">HYROX® Ready</span>';
+      '<span class="l-badge lb-official">'+t('badge_official')+'</span>':
+      '<span class="l-badge lb-ready">'+t('f_ready')+'</span>';
     const statusBadge=g.verified?
-      '<span class="l-badge lb-verified">✓ Verified</span>':
-      '<span class="l-badge lb-unverified">Unverified</span>';
+      '<span class="l-badge lb-verified">'+t('badge_verified')+'</span>':
+      '<span class="l-badge lb-unverified">'+t('s_unverified')+'</span>';
     return `
     <tr id="lr-${g.id}" class="list-row${activeGym===g.id?' active':''}" onclick="selectGym(${g.id})" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="if(!this.classList.contains('active'))this.style.background=''">
       <td class="list-td" style="padding-left:16px;">
-        <div class="l-name">${g.name}</div>
-        <div class="l-sub">${g.ward}</div>
+        <div class="l-name">${gname(g)}</div>
+        <div class="l-sub">${gward(g)}</div>
       </td>
       <td class="list-td tight">
         <span class="l-cov ${bc(g)}">${stationLabel}</span>
@@ -1133,10 +1287,10 @@ function renderList(){
         ${g.lang?'<span class="lang-badge">'+g.lang+'</span>':'<span style="color:var(--muted2);">—</span>'}
       </td>
       <td class="list-td tight">
-        <span class="l-region">${g.prefecture.replace('-to','').replace('-ken','')}</span>
+        <span class="l-region">${prefLabel(g)}</span>
       </td>
       <td class="list-td">
-        <span class="l-notes">${g.notes||'—'}</span>
+        <span class="l-notes">${gnotes(g)||'—'}</span>
       </td>
       <td class="list-td">
         <div class="l-tags">${tagsHTML||'—'}</div>
@@ -1278,8 +1432,8 @@ function renderMobileSheet(){
     <div class="sgi" onclick="openMobileDetail(${g.id})">
       <div class="sgi-dot" style="background:${cc(g)};box-shadow:0 0 6px ${cc(g)}90;"></div>
       <div class="sgi-body">
-        <div class="sgi-name">${g.name}</div>
-        <div class="sgi-sub">${g.ward} · ${g.prefecture.replace('-to','').replace('-ken','')}</div>
+        <div class="sgi-name">${gname(g)}</div>
+        <div class="sgi-sub">${gward(g)} · ${prefLabel(g)}</div>
         <div class="sgi-dots">${dotsHTML}</div>
       </div>
       <span class="sgi-badge ${bc(g)}">${stLbl}</span>
@@ -1298,47 +1452,47 @@ function openMobileDetail(id,fromMarker){
 
   // Populate detail panel
   const c=cc(g);
-  document.getElementById('md-title').textContent=g.name;
+  document.getElementById('md-title').textContent=gname(g);
   document.getElementById('md-title').style.color=c;
 
   const badgeEl=document.getElementById('md-badge');
   if(g.stations!==null){badgeEl.textContent=g.stations+'/8';badgeEl.className='mpc-badge '+pbc(g);}
   else{badgeEl.textContent='TBC';badgeEl.className='mpc-badge pbn';}
 
-  const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(g.name+' '+g.address);
+  const mapsUrl=mapsUrlFor(g);
 
   let officialBadge=g.official?
-    '<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">★ Official</span>':
-    '<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">HYROX® Ready</span>';
+    '<span class="mpc-status-badge" style="border:1px solid var(--accent);color:var(--accent);">'+t('badge_official')+'</span>':
+    '<span class="mpc-status-badge" style="border:1px solid var(--blue);color:var(--blue);">'+t('f_ready')+'</span>';
   let verifiedBadge=g.verified?
-    '<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">✓ Verified</span>':
-    '<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">Unverified</span>';
+    '<span class="mpc-status-badge" style="border:1px solid var(--verified);color:var(--verified);">'+t('badge_verified')+'</span>':
+    '<span class="mpc-status-badge" style="border:1px solid var(--unverified);color:var(--unverified);">'+t('s_unverified')+'</span>';
   const langBadge=g.lang?`<span class="lang-badge">${g.lang}</span>`:'';
 
   const stationsHTML=g.has?
-    '<div class="mpc-sec">Station Coverage</div><div class="mpc-stations">'+
-    SNAMES.map((s,i)=>`<div class="mps"><div class="mpsd ${g.has[i]?'mpsy':'mpsn'}"></div><span class="${g.has[i]?'':'mpsm'}">${s}</span></div>`).join('')+
+    '<div class="mpc-sec">'+t('sec_stations')+'</div><div class="mpc-stations">'+
+    snames().map((s,i)=>`<div class="mps"><div class="mpsd ${g.has[i]?'mpsy':'mpsn'}"></div><span class="${g.has[i]?'':'mpsm'}">${s}</span></div>`).join('')+
     '</div>':
-    '<div class="mpc-sec">Station Coverage</div><div class="mpc-unverified-msg">Station coverage not yet confirmed. Contact gym directly.</div>';
+    '<div class="mpc-sec">'+t('sec_stations')+'</div><div class="mpc-unverified-msg">'+t('msg_no_stations_short')+'</div>';
 
   let contactHTML='';
   if(g.phone) contactHTML+='<div>📞 '+g.phone+'</div>';
   if(g.email) contactHTML+='<div>✉ <a href="mailto:'+g.email+'" style="color:var(--blue);">'+g.email+'</a></div>';
-  if(g.website&&g.website.startsWith('http')) contactHTML+='<div>🌐 <a href="'+g.website+'" target="_blank" style="color:var(--blue);">Visit website</a></div>';
+  if(g.website&&g.website.startsWith('http')) contactHTML+='<div>🌐 <a href="'+g.website+'" target="_blank" style="color:var(--blue);">'+t('lbl_visit_site')+'</a></div>';
 
-  const tagsHTML=g.tags.map(t=>`<span class="mptag">${t}</span>`).join('');
+  const tagsHTML=gtags(g).map(x=>`<span class="mptag">${x}</span>`).join('');
 
   document.getElementById('md-scroll').innerHTML=`
     <div class="mpc-status-row" style="margin-bottom:12px;flex-wrap:wrap;gap:6px;">${officialBadge}${verifiedBadge}${langBadge}</div>
     ${stationsHTML}
-    <div class="mpc-sec">Location & Hours</div>
-    <div class="mpc-addr"><a href="${mapsUrl}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--muted2);">${g.address}</a></div>
-    <div class="mpc-hrs" style="margin-top:4px;">${g.hours?'Hours: '+g.hours:'Hours: Contact gym directly'}</div>
-    <div class="mpc-directions" style="margin-top:10px;"><a href="${mapsUrl}" target="_blank" class="mpc-directions-btn" style="display:inline-flex;align-items:center;gap:5px;font-family:\'Barlow Condensed\',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;border:1px solid rgba(77,166,255,.4);background:rgba(77,166,255,.08);color:var(--blue);border-radius:3px;text-decoration:none;">📍 Open in Google Maps</a></div>
+    <div class="mpc-sec">${t('sec_location')}</div>
+    <div class="mpc-addr"><a href="${mapsUrl}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--muted2);">${gaddr(g)}</a></div>
+    <div class="mpc-hrs" style="margin-top:4px;">${t('lbl_hours')+(ghours(g)||t('val_hours_contact'))}</div>
+    <div class="mpc-directions" style="margin-top:10px;"><a href="${mapsUrl}" target="_blank" class="mpc-directions-btn" style="display:inline-flex;align-items:center;gap:5px;font-family:\'Barlow Condensed\',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;border:1px solid rgba(77,166,255,.4);background:rgba(77,166,255,.08);color:var(--blue);border-radius:3px;text-decoration:none;">${t('btn_maps')}</a></div>
     ${contactHTML?'<div class="mpc-contact" style="margin-top:10px;font-size:.7rem;color:var(--muted);line-height:2;">'+contactHTML+'</div>':''}
     ${tagsHTML?'<div class="mpc-tags" style="margin-top:12px;">'+tagsHTML+'</div>':''}
-    ${g.notes?'<div class="mpc-notes" style="margin-top:12px;">'+g.notes+'</div>':''}
-    ${g.last_verified?'<div class="mpc-last-verified">Last verified: '+formatDate(g.last_verified)+'</div>':''}
+    ${gnotes(g)?'<div class="mpc-notes" style="margin-top:12px;">'+gnotes(g)+'</div>':''}
+    ${g.last_verified?'<div class="mpc-last-verified">'+t('lbl_last_verified')+formatDate(g.last_verified)+'</div>':''}
   `;
 
   const detail=document.getElementById('mobile-detail');
@@ -1470,6 +1624,12 @@ const COL_ALIASES={
   tags:['tags','Tags'],
   notes:['notes','Notes','comments'],
   last_verified:['last_verified','Last Verified','last verified','last_updated','Last Updated'],
+  name_jp:['name_jp','Name JP','name_ja','ジム名'],
+  ward_jp:['ward_jp','Ward JP','ward_ja','市区町村'],
+  address_jp:['address_jp','Address JP','address_ja','住所'],
+  hours_jp:['hours_jp','Hours JP','hours_ja','営業時間'],
+  notes_jp:['notes_jp','Notes JP','notes_ja','備考'],
+  tags_jp:['tags_jp','Tags JP','tags_ja','タグ'],
   has:['has','Has','station_array'],
   s_skierg:['skierg','SkiErg','ski_erg','s_skierg'],
   s_sledpush:['sled_push','Sled Push','sledpush','s_sledpush'],
@@ -1481,13 +1641,26 @@ const COL_ALIASES={
   s_wallballs:['wall_balls','Wall Balls','wallballs','s_wallballs']
 };
 
+// Normalise a header for matching: strips BOM, non-breaking and zero-width spaces,
+// then removes case and every separator. "Ward JP", "ward-jp", "WARD_JP" all → "wardjp".
+function normHeader(h){
+  return String(h||'')
+    .replace(/^\uFEFF/,'')
+    .replace(/[\u00A0\u200B-\u200D\u3000]/g,' ')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9faf]/g,'');
+}
+
 function buildColIndex(headers){
   const idx={};
-  const normalized=headers.map(h=>h.trim());
+  const normalized=headers.map(normHeader);
+  const taken={};
   for(const key in COL_ALIASES){
     for(const alias of COL_ALIASES[key]){
-      const i=normalized.findIndex(h=>h.toLowerCase()===alias.toLowerCase());
-      if(i!==-1){idx[key]=i;break;}
+      const a=normHeader(alias);
+      const i=normalized.findIndex((h,n)=>h===a&&!taken[n]);
+      if(i!==-1){idx[key]=i;taken[i]=true;break;}
     }
   }
   return idx;
@@ -1525,7 +1698,13 @@ function rowToGym(row,idx,fallbackId){
     instagram:(get('instagram')||'').trim(),
     tags:splitTags(get('tags')),
     notes:(get('notes')||'').trim(),
-    last_verified:(get('last_verified')||'').trim()
+    last_verified:(get('last_verified')||'').trim(),
+    name_jp:(get('name_jp')||'').trim(),
+    ward_jp:(get('ward_jp')||'').trim(),
+    address_jp:(get('address_jp')||'').trim(),
+    hours_jp:(get('hours_jp')||'').trim(),
+    notes_jp:(get('notes_jp')||'').trim(),
+    tags_jp:splitTags(get('tags_jp'))
   };
 
   // Build has[8]: prefer per-station boolean cols, fall back to single "has" string
@@ -1585,6 +1764,20 @@ function parseGymCSV(csvText){
   const critical=['name','lat','lng','prefecture'];
   const missing=critical.filter(k=>idx[k]==null);
   if(missing.length) console.warn('[data] missing expected columns:',missing,'— found headers:',headers);
+
+  // JP column diagnostics — tells you instantly whether a _jp column was found and populated
+  const jpCols=['name_jp','ward_jp','address_jp','hours_jp','notes_jp','tags_jp'];
+  const jpReport={};
+  jpCols.forEach(k=>{
+    if(idx[k]==null){jpReport[k]='COLUMN NOT FOUND IN SHEET';}
+    else{
+      const filled=rows.slice(1).filter(r=>(r[idx[k]]||'').trim()!=='').length;
+      jpReport[k]='col '+idx[k]+' ("'+headers[idx[k]].trim()+'") — '+filled+' of '+(rows.length-1)+' rows filled';
+    }
+  });
+  console.log('[i18n] Japanese columns:',jpReport);
+  console.log('[i18n] All sheet headers:',headers.map(h=>h.trim()));
+
   return rows.slice(1)
     .map((r,i)=>rowToGym(r,idx,i+1))
     .filter(g=>g.name&&g.lat!=null&&g.lng!=null);
@@ -1632,6 +1825,7 @@ async function loadGyms(){
 }
 
 async function boot(){
+  setLang(UI_LANG);   // paints static chrome + sets <html lang> before data arrives
   const {data,source,error}=await loadGyms();
   gyms=data;
 
@@ -1641,7 +1835,7 @@ async function boot(){
   setTimeout(initMobile,100);
 
   if(source==='fallback'){
-    showBanner('⚠ Live data unavailable — showing snapshot. '+(error||''),'error');
+    showBanner(t('banner_fallback')+(error||''),'error');
   }
 }
 
@@ -1661,9 +1855,9 @@ async function manualRefresh(){
     renderGyms();
     if(activeView==='list') renderList();
     if(isMobile()) renderMobileSheet();
-    showBanner('✓ Refreshed — '+parsed.length+' gyms synced','ok');
+    showBanner(t('banner_refreshed').replace('{n}',parsed.length),'ok');
   }catch(err){
-    showBanner('⚠ Refresh failed: '+err.message,'error');
+    showBanner(t('banner_refresh_failed')+err.message,'error');
   }finally{
     btn.classList.remove('refreshing');
   }
