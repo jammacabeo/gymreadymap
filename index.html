@@ -78,7 +78,7 @@
 :root {
   --bg:#0d1117; --surface:#161b22; --surface2:#1c2128; --border:#30363d;
   --accent:#e8ff00; --accent-dim:rgba(232,255,0,0.08);
-  --text:#e6edf3; --muted:#7d8590; --muted2:#484f58;
+  --text:#e6edf3; --muted:#a8b3bf; --muted2:#6e7681;
   --green:#00e676; --orange:#ff9100; --orange2:#ff6600; --red:#ff3d00;
   --blue:#4da6ff; --verified:#00e676; --unverified:#ff3d00;
 }
@@ -197,13 +197,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .mpc-contact a:hover{text-decoration:underline;}
 .mpc-notes{font-size:.63rem;color:var(--muted);line-height:1.65;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
 .mpc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px;}
-.mptag{font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border:1px solid rgba(77,166,255,.3);color:var(--blue);border-radius:2px;}
+.mptag{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(77,166,255,.45);color:#7cc0ff;border-radius:2px;}
 .mpc-last-verified{font-size:.62rem;color:var(--muted);font-style:italic;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
 
 /* Language badge — reused in popup, sidebar, list */
 .lang-badge{
-  font-family:'Barlow Condensed',sans-serif;font-size:.52rem;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;
+  font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;
   border:1px solid rgba(180,120,255,.45);background:rgba(180,120,255,.08);
   color:#c99dff;border-radius:2px;white-space:nowrap;
 }
@@ -256,8 +256,30 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 /* ── LIST VIEW ── */
 #list-view{display:none;flex:1;overflow-y:auto;background:var(--bg);}
 .list-table{width:100%;border-collapse:collapse;}
-.list-th{padding:10px 12px;text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:2;}
+.list-th{padding:12px 14px;text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:2;white-space:nowrap;}
 .list-row.active{background:var(--accent-dim)!important;box-shadow:inset 2px 0 0 var(--accent);}
+.list-row{cursor:pointer;transition:background .1s;}
+.list-td{padding:14px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.list-td.tight{white-space:nowrap;}
+.l-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.15rem;text-transform:uppercase;letter-spacing:.03em;line-height:1.2;}
+.l-sub{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+.l-cov{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:900;padding:3px 10px;border-radius:2px;}
+.l-dots{display:grid;grid-template-columns:repeat(4,10px);gap:5px;width:max-content;}
+.l-d{width:10px;height:10px;border-radius:50%;}
+.l-region{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.l-notes{font-size:.78rem;color:#c9d1d9;line-height:1.55;display:block;max-width:420px;}
+.l-tags{display:flex;gap:5px;flex-wrap:wrap;max-width:220px;}
+.l-tag{font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(77,166,255,.45);color:#7cc0ff;border-radius:2px;white-space:nowrap;}
+/* Status / type badges — inline-flex + nowrap so the label can never wrap inside its border */
+.l-badge{
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
+  font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:2px;line-height:1;
+}
+.lb-official{border:1px solid var(--accent);color:var(--accent);}
+.lb-ready{border:1px solid var(--blue);color:var(--blue);}
+.lb-verified{border:1px solid var(--verified);color:var(--verified);}
+.lb-unverified{border:1px solid var(--unverified);color:var(--unverified);}
 
 /* ══════════════════════════════════════════
    MOBILE STYLES  (max-width: 767px)
@@ -483,7 +505,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.8</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Greater Tokyo 2026 · v4.9</div>
   </div>
   <div class="header-stats">
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">+ Submit/Verify a Gym</a>
@@ -1084,40 +1106,40 @@ function renderList(){
   document.getElementById('list-tbody').innerHTML=filtered.map(g=>{
     const stationLabel=g.stations!==null?g.stations+'/8':'TBC';
     const dotsHTML=g.has?
-      g.has.map(s=>`<div style="width:8px;height:8px;border-radius:50%;background:${s?'#00e676':'var(--muted2)'};${s?'box-shadow:0 0 4px #00e676':''}"></div>`).join(''):
-      Array(8).fill('<div style="width:8px;height:8px;border-radius:50%;background:#2a2a2a;border:1px solid #444"></div>').join('');
-    const tagsHTML=g.tags.map(t=>`<span style="font-size:.5rem;letter-spacing:.07em;text-transform:uppercase;padding:2px 5px;border:1px solid rgba(77,166,255,.3);color:var(--blue);border-radius:2px;">${t}</span>`).join('');
+      g.has.map(s=>`<div class="l-d" style="background:${s?'#00e676':'var(--muted2)'};${s?'box-shadow:0 0 4px #00e676':''}"></div>`).join(''):
+      Array(8).fill('<div class="l-d" style="background:#2a2a2a;border:1px solid #4d545c"></div>').join('');
+    const tagsHTML=g.tags.map(t=>`<span class="l-tag">${t}</span>`).join('');
+    const typeBadge=g.official?
+      '<span class="l-badge lb-official">★ Official</span>':
+      '<span class="l-badge lb-ready">HYROX® Ready</span>';
+    const statusBadge=g.verified?
+      '<span class="l-badge lb-verified">✓ Verified</span>':
+      '<span class="l-badge lb-unverified">Unverified</span>';
     return `
-    <tr id="lr-${g.id}" class="list-row${activeGym===g.id?' active':''}" onclick="selectGym(${g.id})" style="cursor:pointer;transition:background .1s;height:62px;" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="if(!this.classList.contains('active'))this.style.background=''">
-      <td style="padding:10px 16px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;text-transform:uppercase;letter-spacing:.03em;">${g.name}</div>
-        <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px;">${g.ward}</div>
+    <tr id="lr-${g.id}" class="list-row${activeGym===g.id?' active':''}" onclick="selectGym(${g.id})" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="if(!this.classList.contains('active'))this.style.background=''">
+      <td class="list-td" style="padding-left:16px;">
+        <div class="l-name">${g.name}</div>
+        <div class="l-sub">${g.ward}</div>
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <span class="gi-badge ${bc(g)}" style="font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:900;padding:2px 8px;border-radius:2px;">${stationLabel}</span>
+      <td class="list-td tight">
+        <span class="l-cov ${bc(g)}">${stationLabel}</span>
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:100px;">${dotsHTML}</div>
+      <td class="list-td tight">
+        <div class="l-dots">${dotsHTML}</div>
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        ${g.official?'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--accent);color:var(--accent);border-radius:2px;">★ Official</span>'
-        :'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--blue);color:var(--blue);border-radius:2px;">HYROX® Ready</span>'}
-      </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        ${g.verified?'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;padding:2px 7px;border:1px solid var(--verified);color:var(--verified);border-radius:2px;">✓ Verified</span>'
-        :'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.52rem;font-weight:700;padding:2px 7px;border:1px solid var(--unverified);color:var(--unverified);border-radius:2px;">Unverified</span>'}
-      </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
+      <td class="list-td tight">${typeBadge}</td>
+      <td class="list-td tight">${statusBadge}</td>
+      <td class="list-td tight">
         ${g.lang?'<span class="lang-badge">'+g.lang+'</span>':'<span style="color:var(--muted2);">—</span>'}
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <span style="font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">${g.prefecture.replace('-to','').replace('-ken','')}</span>
+      <td class="list-td tight">
+        <span class="l-region">${g.prefecture.replace('-to','').replace('-ken','')}</span>
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <span style="font-size:.58rem;color:var(--muted);line-height:1.4;">${g.notes||'—'}</span>
+      <td class="list-td">
+        <span class="l-notes">${g.notes||'—'}</span>
       </td>
-      <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;">
-        <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:180px;">${tagsHTML||'—'}</div>
+      <td class="list-td">
+        <div class="l-tags">${tagsHTML||'—'}</div>
       </td>
     </tr>`;
   }).join('');
