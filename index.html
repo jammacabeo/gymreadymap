@@ -551,20 +551,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <span class="fl" data-i18n="f_region">Region</span>
   <div style="display:flex;gap:4px;">
     <button class="fb on" data-group="region" data-val="all" onclick="setTopFilter('region','all',this)" data-i18n="f_all">All</button>
-    <button class="fb" data-group="region" data-val="Tokyo-to" onclick="setTopFilter('region','Tokyo-to',this)" data-i18n="r_tokyo">Tokyo</button>
-    <button class="fb" data-group="region" data-val="Kanagawa-ken" onclick="setTopFilter('region','Kanagawa-ken',this)" data-i18n="r_kanagawa">Kanagawa</button>
-    <button class="fb" data-group="region" data-val="Saitama-ken" onclick="setTopFilter('region','Saitama-ken',this)" data-i18n="r_saitama">Saitama</button>
-    <button class="fb" data-group="region" data-val="Chiba-ken" onclick="setTopFilter('region','Chiba-ken',this)" data-i18n="r_chiba">Chiba</button>
-  </div>
-  <div class="fsep"></div>
-  <span class="fl" data-i18n="f_area">Area</span>
-  <div style="display:flex;gap:4px;">
-    <button class="fb on" data-group="area" data-val="all" onclick="setTopFilter('area','all',this)" data-i18n="f_all">All</button>
-    <button class="fb" data-group="area" data-val="central" onclick="setTopFilter('area','central',this)" data-i18n="a_central">Central</button>
-    <button class="fb" data-group="area" data-val="west" onclick="setTopFilter('area','west',this)" data-i18n="a_west">West</button>
-    <button class="fb" data-group="area" data-val="east" onclick="setTopFilter('area','east',this)" data-i18n="a_east">East</button>
-    <button class="fb" data-group="area" data-val="south" onclick="setTopFilter('area','south',this)" data-i18n="a_south">South</button>
-    <button class="fb" data-group="area" data-val="north" onclick="setTopFilter('area','north',this)" data-i18n="a_north">North</button>
+    <button class="fb" data-group="region" data-val="kanto" onclick="setTopFilter('region','kanto',this)" data-i18n="r_kanto">Kanto</button>
+    <button class="fb" data-group="region" data-val="kansai" onclick="setTopFilter('region','kansai',this)" data-i18n="r_kansai">Kansai</button>
+    <button class="fb" data-group="region" data-val="chubu" onclick="setTopFilter('region','chubu',this)" data-i18n="r_chubu">Chubu</button>
   </div>
   <div class="fsep"></div>
   <span class="fl" data-i18n="f_lang">Language</span>
@@ -729,10 +718,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <div class="mfd-title" data-i18n="f_region">Region</div>
     <div class="mfd-chips">
       <button class="mfd-chip on" data-dgroup="region" data-dval="all" onclick="setDrawerFilter('region','all',this)" data-i18n="f_all">All</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Tokyo-to" onclick="setDrawerFilter('region','Tokyo-to',this)" data-i18n="r_tokyo">Tokyo</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Kanagawa-ken" onclick="setDrawerFilter('region','Kanagawa-ken',this)" data-i18n="r_kanagawa">Kanagawa</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Saitama-ken" onclick="setDrawerFilter('region','Saitama-ken',this)" data-i18n="r_saitama">Saitama</button>
-      <button class="mfd-chip" data-dgroup="region" data-dval="Chiba-ken" onclick="setDrawerFilter('region','Chiba-ken',this)" data-i18n="r_chiba">Chiba</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="kanto" onclick="setDrawerFilter('region','kanto',this)" data-i18n="r_kanto">Kanto</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="kansai" onclick="setDrawerFilter('region','kansai',this)" data-i18n="r_kansai">Kansai</button>
+      <button class="mfd-chip" data-dgroup="region" data-dval="chubu" onclick="setDrawerFilter('region','chubu',this)" data-i18n="r_chubu">Chubu</button>
     </div>
   </div>
 
@@ -779,7 +767,7 @@ const I18N={
     f_clear:'✕ Clear', f_type:'Type', f_region:'Region', f_area:'Area',
     f_lang:'Language', f_status:'Status', f_all:'All',
     f_official:'Official', f_ready:'HYROX® Ready',
-    r_tokyo:'Tokyo', r_kanagawa:'Kanagawa', r_saitama:'Saitama', r_chiba:'Chiba',
+    r_kanto:'Kanto', r_kansai:'Kansai', r_chubu:'Chubu',
     a_central:'Central', a_west:'West', a_east:'East', a_south:'South', a_north:'North',
     s_verified:'Verified', s_unverified:'Unverified',
     tab_map:'🗺 Map View', tab_list:'☰ List View',
@@ -812,7 +800,7 @@ const I18N={
     f_clear:'✕ クリア', f_type:'種別', f_region:'都県', f_area:'エリア',
     f_lang:'対応言語', f_status:'確認状況', f_all:'すべて',
     f_official:'公式', f_ready:'HYROX®対応',
-    r_tokyo:'東京', r_kanagawa:'神奈川', r_saitama:'埼玉', r_chiba:'千葉',
+    r_kanto:'関東', r_kansai:'関西', r_chubu:'中部',
     a_central:'都心', a_west:'西部', a_east:'東部', a_south:'南部', a_north:'北部',
     s_verified:'確認済み', s_unverified:'未確認',
     tab_map:'🗺 マップ', tab_list:'☰ リスト',
@@ -990,12 +978,49 @@ function formatDate(s){
   return d.toLocaleDateString(UI_LANG==='jp'?'ja-JP':'en-US',{year:'numeric',month:UI_LANG==='jp'?'numeric':'short',day:'numeric'});
 }
 
+// ── REGION DERIVATION (prefecture → macro region) ──
+const PREF_REGION={
+  hokkaido:'hokkaido','北海道':'hokkaido',
+  aomori:'tohoku',iwate:'tohoku',miyagi:'tohoku',akita:'tohoku',yamagata:'tohoku',fukushima:'tohoku',
+  '青森':'tohoku','岩手':'tohoku','宮城':'tohoku','秋田':'tohoku','山形':'tohoku','福島':'tohoku',
+  ibaraki:'kanto',tochigi:'kanto',gunma:'kanto',saitama:'kanto',chiba:'kanto',tokyo:'kanto',kanagawa:'kanto',
+  '茨城':'kanto','栃木':'kanto','群馬':'kanto','埼玉':'kanto','千葉':'kanto','東京':'kanto','神奈川':'kanto',
+  niigata:'chubu',toyama:'chubu',ishikawa:'chubu',fukui:'chubu',yamanashi:'chubu',nagano:'chubu',gifu:'chubu',shizuoka:'chubu',aichi:'chubu',nagoya:'chubu',
+  '新潟':'chubu','富山':'chubu','石川':'chubu','福井':'chubu','山梨':'chubu','長野':'chubu','岐阜':'chubu','静岡':'chubu','愛知':'chubu','名古屋':'chubu',
+  mie:'kansai',shiga:'kansai',kyoto:'kansai',osaka:'kansai',hyogo:'kansai',nara:'kansai',wakayama:'kansai',
+  '三重':'kansai','滋賀':'kansai','京都':'kansai','大阪':'kansai','兵庫':'kansai','奈良':'kansai','和歌山':'kansai',
+  tottori:'chugoku',shimane:'chugoku',okayama:'chugoku',hiroshima:'chugoku',yamaguchi:'chugoku',
+  '鳥取':'chugoku','島根':'chugoku','岡山':'chugoku','広島':'chugoku','山口':'chugoku',
+  tokushima:'shikoku',kagawa:'shikoku',ehime:'shikoku',kochi:'shikoku',
+  '徳島':'shikoku','香川':'shikoku','愛媛':'shikoku','高知':'shikoku',
+  fukuoka:'kyushu',saga:'kyushu',nagasaki:'kyushu',kumamoto:'kyushu',oita:'kyushu',miyazaki:'kyushu',kagoshima:'kyushu',
+  '福岡':'kyushu','佐賀':'kyushu','長崎':'kyushu','熊本':'kyushu','大分':'kyushu','宮崎':'kyushu','鹿児島':'kyushu',
+  okinawa:'okinawa','沖縄':'okinawa'
+};
+const REGION_KEYS=['hokkaido','tohoku','kanto','chubu','kansai','chugoku','shikoku','kyushu','okinawa'];
+
+// Normalises "Tokyo-to", "Osaka Fu", "愛知県" → a lookup key.
+function prefKey(v){
+  return String(v||'').trim().toLowerCase()
+    .replace(/[\s_]+/g,'-')
+    .replace(/-(to|fu|ken|shi|prefecture)$/,'')
+    .replace(/[\u90fd\u5e9c\u770c\u5e02]$/,'');
+}
+
+// Uses an explicit `region` column if the sheet has one, otherwise derives it
+// from `prefecture`. Returns '' when the prefecture is unrecognised.
+function regionOf(g){
+  const explicit=prefKey(g.region);
+  if(explicit&&REGION_KEYS.indexOf(explicit)!==-1) return explicit;
+  return PREF_REGION[prefKey(g.prefecture)]||'';
+}
+
 // ── FILTERS ──
 function matchTop(g){
   const f=topFilters;
   if(f.type==='official'&&!g.official) return false;
   if(f.type==='ready'&&g.official) return false;
-  if(f.region!=='all'&&g.prefecture!==f.region) return false;
+  if(f.region!=='all'&&regionOf(g)!==f.region) return false;
   if(f.area!=='all'&&g.area!==f.area) return false;
   if(f.lang!=='all'&&g.lang!==f.lang) return false;
   if(f.status==='verified'&&!g.verified) return false;
@@ -1037,7 +1062,7 @@ function initMap(){
   map=L.map('leaflet-map',{
     center:[35.65,139.65],
     zoom:10,
-    minZoom:9,
+    minZoom:5,
     maxZoom:18,
     zoomControl:true
   });
@@ -1610,6 +1635,7 @@ const COL_ALIASES={
   ward:['ward','Ward','district'],
   area:['area','Area','zone'],
   prefecture:['prefecture','Prefecture','pref'],
+  region:['region','Region','macro_region'],
   lang:['lang','Lang','language','Language'],
   official:['official','Official','is_official'],
   verified:['verified','Verified','is_verified'],
@@ -1685,6 +1711,7 @@ function rowToGym(row,idx,fallbackId){
     ward:(get('ward')||'').trim(),
     area:(get('area')||'').trim().toLowerCase(),
     prefecture:(get('prefecture')||'').trim(),
+    region:(get('region')||'').trim(),
     lang:(get('lang')||'').trim(),
     official:toBool(get('official')),
     verified:toBool(get('verified')),
