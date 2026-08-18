@@ -5,30 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ── Primary SEO ── -->
-<title>HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo</title>
-<meta name="description" content="Interactive map of HYROX-ready gyms across Greater Tokyo. Find official HYROX training clubs and gyms with full station coverage (SkiErg, Sled Push, Wall Balls, etc.) in Tokyo, Kanagawa, Saitama, and Chiba.">
-<meta name="keywords" content="HYROX Japan, HYROX Tokyo, HYROX gym map, HYROX training, HYROX gyms, fitness Tokyo, SkiErg Tokyo, sled push Tokyo, HYROX prep">
-<meta name="author" content="Gym Ready Map">
+<title>GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya</title>
+<meta name="description" content="Find HYROX training gyms across Japan. Station-by-station equipment data for gyms in Tokyo, Osaka, Nagoya and beyond — SkiErg, sled push, wall balls, rower. Independent, athlete-built, free to use.">
+<meta name="keywords" content="HYROX Japan, HYROX Tokyo, HYROX Osaka, HYROX Nagoya, HYROX gym map, HYROXジム, HYROX 日本, HYROX training, SkiErg Japan, sled push gym, HYROX prep, 初めてのHYROX">
+<meta name="author" content="GymReadyMap Japan">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://gymreadymap.com/">
 
 <!-- ── Open Graph (Facebook, LINE, WhatsApp, Slack link previews) ── -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gymreadymap.com/">
-<meta property="og:title" content="HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo">
-<meta property="og:description" content="Interactive map of HYROX-ready gyms across Greater Tokyo. Find gyms with full station coverage for HYROX race prep.">
+<meta property="og:title" content="GymReadyMap Japan | Where to Train for HYROX">
+<meta property="og:description" content="Station-by-station equipment data for HYROX training gyms across Tokyo, Osaka, Nagoya and beyond. Independent, athlete-built, free.">
 <meta property="og:image" content="https://gymreadymap.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ja_JP">
-<meta property="og:site_name" content="Gym Ready Map">
+<meta property="og:site_name" content="GymReadyMap Japan">
 
 <!-- ── Twitter Card (also used by some other platforms) ── -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://gymreadymap.com/">
-<meta name="twitter:title" content="HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo">
-<meta name="twitter:description" content="Interactive map of HYROX-ready gyms across Greater Tokyo with full station coverage.">
+<meta name="twitter:title" content="GymReadyMap Japan | Where to Train for HYROX">
+<meta name="twitter:description" content="Station-by-station equipment data for HYROX training gyms across Japan.">
 <meta name="twitter:image" content="https://gymreadymap.com/og-image.png">
 
 <!-- ── Favicon & PWA basics ── -->
@@ -36,15 +36,15 @@
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0d1117">
 
-<!-- ── JSON-LD Structured Data: tells Google "this is a directory of fitness businesses" ── -->
+<!-- ── JSON-LD Structured Data ── -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "Gym Ready Map",
-  "alternateName": "HYROX Japan Gym Map",
+  "name": "GymReadyMap Japan",
+  "alternateName": ["HYROX Japan Gym Map", "ジムレディマップ ジャパン"],
   "url": "https://gymreadymap.com/",
-  "description": "Interactive map of HYROX-ready training gyms across Greater Tokyo, Japan.",
+  "description": "Independent map of HYROX training gyms across Japan with station-by-station equipment verification.",
   "inLanguage": ["en", "ja"],
   "potentialAction": {
     "@type": "SearchAction",
@@ -58,13 +58,13 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Gym Ready Map",
+  "name": "GymReadyMap Japan",
   "url": "https://gymreadymap.com/",
   "logo": "https://gymreadymap.com/favicon.png",
-  "description": "A community-built intelligence map of HYROX-ready gyms in Greater Tokyo.",
+  "description": "A community-built intelligence map of HYROX-ready gyms across Japan, with station-by-station equipment verification.",
   "areaServed": {
-    "@type": "Place",
-    "name": "Greater Tokyo, Japan"
+    "@type": "Country",
+    "name": "Japan"
   }
 }
 </script>
@@ -521,7 +521,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · v5.3</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.3</div>
   </div>
   <div class="header-stats">
     <div class="lang-toggle" id="lang-toggle">
@@ -789,7 +789,7 @@ const I18N={
     banner_fallback:'⚠ Live data unavailable — showing snapshot. ',
     banner_refreshed:'✓ Refreshed — {n} gyms synced',
     banner_refresh_failed:'⚠ Refresh failed: ',
-    doc_title:'HYROX Japan Gym Map | Find HYROX Training Gyms in Tokyo'
+    doc_title:'GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya'
   },
   jp:{
     btn_submit:'+ ジムを登録・確認',
@@ -822,7 +822,7 @@ const I18N={
     banner_fallback:'⚠ 最新データを取得できません — 保存済みデータを表示中。',
     banner_refreshed:'✓ 更新完了 — {n}件のジムを同期しました',
     banner_refresh_failed:'⚠ 更新に失敗しました: ',
-    doc_title:'HYROX ジムマップ | 東京のHYROX対応ジムを探す'
+    doc_title:'GymReadyMap Japan | 日本のHYROXトレーニングジムマップ（東京・大阪・名古屋）'
   }
 };
 
