@@ -852,11 +852,33 @@ function gtags(g){
   return g.tags||[];
 }
 function snames(){return UI_LANG==='jp'?SNAMES_JP:SNAMES;}
-const PREF_JP={'Tokyo':'東京','Kanagawa':'神奈川','Saitama':'埼玉','Chiba':'千葉'};
+// All 47 prefectures. Keys are lowercase romaji with the -to/-fu/-ken/-do suffix
+// already stripped, so "Tokyo-to", "OSAKA-FU" and "Aichi-ken" all resolve.
+const PREF_JP={
+  hokkaido:'北海道',
+  aomori:'青森',iwate:'岩手',miyagi:'宮城',akita:'秋田',yamagata:'山形',fukushima:'福島',
+  ibaraki:'茨城',tochigi:'栃木',gunma:'群馬',saitama:'埼玉',chiba:'千葉',tokyo:'東京',kanagawa:'神奈川',
+  niigata:'新潟',toyama:'富山',ishikawa:'石川',fukui:'福井',yamanashi:'山梨',nagano:'長野',
+  gifu:'岐阜',shizuoka:'静岡',aichi:'愛知',
+  mie:'三重',shiga:'滋賀',kyoto:'京都',osaka:'大阪',hyogo:'兵庫',nara:'奈良',wakayama:'和歌山',
+  tottori:'鳥取',shimane:'島根',okayama:'岡山',hiroshima:'広島',yamaguchi:'山口',
+  tokushima:'徳島',kagawa:'香川',ehime:'愛媛',kochi:'高知',
+  fukuoka:'福岡',saga:'佐賀',nagasaki:'長崎',kumamoto:'熊本',oita:'大分',miyazaki:'宮崎',kagoshima:'鹿児島',
+  okinawa:'沖縄'
+};
+
 function prefLabel(g){
-  const raw=(g.prefecture||'').replace('-to','').replace('-ken','');
-  return UI_LANG==='jp'?(PREF_JP[raw]||raw):raw;
+  const raw=String(g.prefecture||'').trim();
+  if(!raw) return '';
+  // Sheet cell is already Japanese — drop the 都/府/県 suffix (北海道 stays whole).
+  if(/[\u3040-\u30ff\u4e00-\u9faf]/.test(raw)){
+    return raw.replace(/[都府県]$/,'');
+  }
+  // Romaji: strip -to / -fu / -ken / -do / -prefecture, however it's separated.
+  const base=raw.replace(/[-\s_]?(to|fu|ken|do|prefecture)$/i,'');
+  return UI_LANG==='jp'?(PREF_JP[base.toLowerCase()]||base):base;
 }
+  
 // Google Maps resolves Japanese addresses well; always pair with the EN name for reliability.
 function mapsUrlFor(g){
   return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((g.name||'')+' '+gaddr(g));
