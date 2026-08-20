@@ -521,7 +521,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.3</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.4</div>
   </div>
   <div class="header-stats">
     <div class="lang-toggle" id="lang-toggle">
@@ -789,6 +789,7 @@ const I18N={
     banner_fallback:'⚠ Live data unavailable — showing snapshot. ',
     banner_refreshed:'✓ Refreshed — {n} gyms synced',
     banner_refresh_failed:'⚠ Refresh failed: ',
+    banner_link_copied:'✓ Link copied to clipboard',
     doc_title:'GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya'
   },
   jp:{
@@ -822,6 +823,7 @@ const I18N={
     banner_fallback:'⚠ 最新データを取得できません — 保存済みデータを表示中。',
     banner_refreshed:'✓ 更新完了 — {n}件のジムを同期しました',
     banner_refresh_failed:'⚠ 更新に失敗しました: ',
+    banner_link_copied:'✓ リンクをコピーしました',
     doc_title:'GymReadyMap Japan | 日本のHYROXトレーニングジムマップ（東京・大阪・名古屋）'
   }
 };
@@ -1216,7 +1218,31 @@ function showPopupForGym(g){
   card.classList.add('show');
 }
 
-function closePopup(){document.getElementById('popup-card').classList.remove('show');}
+function closePopup(){document.getElementById('popup-card').classList.remove('show');setGymURL(null);}
+
+// ── DEEP LINKS (?gym=ID) ──
+// Query-param only: no build step, no server routing, works on Netlify static.
+function setGymURL(id){
+  try{
+    const u=new URL(window.location);
+    if(id==null) u.searchParams.delete('gym'); else u.searchParams.set('gym',id);
+    history.replaceState(null,'',u);
+  }catch(e){}
+}
+function getGymFromURL(){
+  try{
+    const v=new URL(window.location).searchParams.get('gym');
+    if(!v) return null;
+    const n=parseInt(v,10);
+    return isNaN(n)?null:n;
+  }catch(e){return null;}
+}
+function copyGymLink(id){
+  const url=window.location.origin+window.location.pathname+'?gym='+id;
+  const done=()=>showBanner(t('banner_link_copied'),'ok');
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done).catch(()=>prompt('Copy link:',url));
+  else prompt('Copy link:',url);
+}
 
 // ── GYM LIST (sidebar) ──
 function renderGyms(){
@@ -1274,6 +1300,7 @@ function selectGym(id){
 }
 function highlightGym(id){
   activeGym=id;
+  setGymURL(id);
   // Sidebar
   document.querySelectorAll('.gym-item').forEach(el=>el.classList.remove('active'));
   const gi=document.getElementById('gi-'+id);
@@ -1545,10 +1572,12 @@ function openMobileDetail(id,fromMarker){
 
   const detail=document.getElementById('mobile-detail');
   detail.classList.add('show');
+  setGymURL(id);
 }
 
 function closeMobileDetail(){
   document.getElementById('mobile-detail').classList.remove('show');
+  setGymURL(null);
 }
 
 // ── Filter drawer ──
@@ -1883,6 +1912,15 @@ async function boot(){
   map.on('movestart',onMapMove);
   renderGyms();
   setTimeout(initMobile,100);
+
+  // Deep link: ?gym=ID flies to that gym and opens its card
+  const deepId=getGymFromURL();
+  if(deepId!=null&&gyms.some(g=>g.id===deepId)){
+    setTimeout(()=>{
+      if(isMobile()) openMobileDetail(deepId);
+      else selectGym(deepId);
+    },500);
+  }
 
   if(source==='fallback'){
     showBanner(t('banner_fallback')+(error||''),'error');
