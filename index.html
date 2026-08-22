@@ -296,6 +296,88 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .lb-verified{border:1px solid var(--verified);color:var(--verified);}
 .lb-unverified{border:1px solid var(--unverified);color:var(--unverified);}
 
+
+/* ── SEARCH BOX (sidebar + mobile sheet) ── */
+.sb-search{padding:10px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.search-row{display:flex;gap:6px;}
+.search-wrap{position:relative;flex:1;}
+.search-input{
+  width:100%;font-family:'Barlow',sans-serif;font-size:.82rem;
+  padding:9px 26px 9px 30px;background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);border-radius:3px;outline:none;transition:border-color .15s;
+}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--muted2);}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted2);font-size:.8rem;pointer-events:none;}
+.search-clear{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.95rem;
+  line-height:1;padding:2px 4px;display:none;
+}
+.search-clear.show{display:block;}
+.search-clear:hover{color:var(--accent);}
+.near-btn{
+  font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+  padding:0 11px;border:1px solid rgba(77,166,255,.4);background:rgba(77,166,255,.08);
+  color:var(--blue);border-radius:3px;cursor:pointer;transition:all .15s;flex-shrink:0;
+}
+.near-btn:hover{background:rgba(77,166,255,.18);border-color:var(--blue);}
+.near-btn.on{background:var(--blue);color:#06121f;border-color:var(--blue);}
+.near-btn.locating{opacity:.6;pointer-events:none;}
+.near-note{font-size:.6rem;color:var(--muted);margin-top:6px;line-height:1.5;}
+.near-note.err{color:var(--orange);}
+.gi-dist{color:var(--blue);font-weight:500;}
+
+/* ── ZERO-RESULT / DEMAND CAPTURE CARD ── */
+.zero-card{padding:22px 18px;text-align:left;}
+.zero-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.05rem;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;line-height:1.25;
+}
+.zero-body{font-size:.75rem;color:var(--muted);line-height:1.65;margin-bottom:14px;}
+.zero-actions{display:flex;flex-direction:column;gap:7px;}
+.zero-btn{
+  font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;text-align:center;
+  padding:11px 14px;border-radius:3px;cursor:pointer;text-decoration:none;
+  border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s;
+}
+.zero-btn:hover{border-color:var(--accent);color:var(--accent);}
+.zero-btn.primary{border-color:rgba(232,255,0,.45);background:rgba(232,255,0,.08);color:var(--accent);}
+.zero-btn.primary:hover{background:rgba(232,255,0,.16);border-color:var(--accent);}
+
+/* Inline waitlist form */
+.wl-form{margin-top:13px;padding-top:13px;border-top:1px solid var(--border);display:none;}
+.wl-form.show{display:block;}
+.wl-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:.56rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:9px 0 4px;
+}
+.wl-input{
+  width:100%;font-family:'Barlow',sans-serif;font-size:.8rem;padding:8px 10px;
+  background:var(--surface2);color:var(--text);border:1px solid var(--border);
+  border-radius:3px;outline:none;
+}
+.wl-input:focus{border-color:var(--accent);}
+.wl-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.wl-chip{
+  font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;padding:5px 9px;
+  border:1px solid var(--border);background:transparent;color:var(--muted2);
+  border-radius:14px;cursor:pointer;transition:all .12s;
+}
+.wl-chip.on{background:var(--accent);color:#000;border-color:var(--accent);}
+.wl-submit{
+  width:100%;margin-top:13px;font-family:'Barlow Condensed',sans-serif;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:11px;border:1px solid rgba(232,255,0,.45);background:rgba(232,255,0,.1);
+  color:var(--accent);border-radius:3px;cursor:pointer;transition:all .15s;
+}
+.wl-submit:hover{background:rgba(232,255,0,.2);}
+.wl-privacy{font-size:.58rem;color:var(--muted2);line-height:1.55;margin-top:9px;}
+.wl-done{font-size:.78rem;color:var(--green);line-height:1.6;padding:10px 0;}
+
 /* ══════════════════════════════════════════
    MOBILE STYLES  (max-width: 767px)
 ══════════════════════════════════════════ */
@@ -508,6 +590,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .md-scroll{padding-bottom:calc(40px + env(safe-area-inset-bottom));}
   .mobile-filter-drawer{padding-bottom:calc(16px + env(safe-area-inset-bottom));}
 
+  /* Search row inside the bottom sheet */
+  .sb-search{padding:0 16px 12px;border-bottom:1px solid var(--border);}
+  .search-input{font-size:16px;padding:11px 30px 11px 33px;} /* 16px stops iOS zoom-on-focus */
+  .near-btn{font-size:.7rem;padding:0 14px;}
+  .zero-card{padding:26px 18px;}
+  .zero-title{font-size:1.15rem;}
+  .zero-body{font-size:.85rem;}
+  .zero-btn{font-size:.8rem;padding:14px;}
+  .wl-input{font-size:16px;padding:11px;}
+  .wl-chip{font-size:.72rem;padding:7px 12px;}
+  .wl-submit{font-size:.85rem;padding:14px;}
+
   /* Hide desktop popup on mobile */
   .map-popup-card{display:none!important;}
   .map-legend{display:none;}
@@ -521,7 +615,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.4</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.5</div>
   </div>
   <div class="header-stats">
     <div class="lang-toggle" id="lang-toggle">
@@ -647,6 +741,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 
   <!-- SIDEBAR -->
   <div class="sidebar">
+    <div class="sb-search">
+      <div class="search-row">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input type="text" class="search-input" id="search-input"
+                 oninput="onSearchInput(this.value)"
+                 data-i18n-ph="search_ph" placeholder="Search gym, ward, prefecture…">
+          <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+        </div>
+        <button class="near-btn" id="near-btn" onclick="toggleNearMe()" data-i18n="btn_near">◎ Near me</button>
+      </div>
+      <div class="near-note" id="near-note" style="display:none;"></div>
+    </div>
     <div class="sb-filter">
       <button class="sfb on" onclick="setSbFilter('all',this)" data-i18n="f_all">All</button>
       <button class="sfb" onclick="setSbFilter('full',this)">8/8</button>
@@ -682,6 +789,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <div class="sheet-header">
     <div class="sheet-count"><span id="mobile-count">41</span> <span data-i18n="m_gyms">gyms</span></div>
     <button class="sheet-filter-btn" id="sheet-filter-btn" onclick="toggleFilterDrawer()" data-i18n="m_filters">⚙ Filters</button>
+  </div>
+  <div class="sb-search">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" id="m-search-input"
+               oninput="onSearchInput(this.value)"
+               data-i18n-ph="search_ph" placeholder="Search gym, ward, prefecture…">
+        <button class="search-clear" id="m-search-clear" onclick="clearSearch()">✕</button>
+      </div>
+      <button class="near-btn" id="m-near-btn" onclick="toggleNearMe()" data-i18n="btn_near">◎ Near me</button>
+    </div>
+    <div class="near-note" id="m-near-note" style="display:none;"></div>
   </div>
   <div class="sheet-gym-list" id="sheet-gym-list"></div>
 </div>
@@ -790,7 +910,29 @@ const I18N={
     banner_refreshed:'✓ Refreshed — {n} gyms synced',
     banner_refresh_failed:'⚠ Refresh failed: ',
     banner_link_copied:'✓ Link copied to clipboard',
-    doc_title:'GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya'
+    doc_title:'GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya',
+    search_ph:'Search gym, ward, prefecture…',
+    btn_near:'◎ Near me',
+    near_locating:'Locating…',
+    near_on:'◎ Nearest first',
+    near_found:'Showing gyms nearest to you. Closest: {n} km.',
+    near_none:'No gyms found within {r} km of you.',
+    near_denied:'Location access blocked. You can search by ward or prefecture instead.',
+    near_unsupported:'Your browser does not support location. Try searching by ward instead.',
+    near_error:'Could not get your location. Try searching by ward instead.',
+    zero_title:'No gyms match yet',
+    zero_body:'This map is built by athletes, gym by gym. If there is nothing near you, that gap is worth recording — it is how underserved areas get found.',
+    zero_cta_wait:'Tell us where you train',
+    zero_cta_submit:'+ Submit a gym you know',
+    wl_area:'Your area (ward, city or prefecture)',
+    wl_area_ph:'e.g. Nakano-ku, Sapporo, 福岡',
+    wl_email:'Email (optional — to hear when a gym opens near you)',
+    wl_email_ph:'you@example.com',
+    wl_stations:'Stations you cannot train right now (optional)',
+    wl_submit:'Send',
+    wl_need_area:'Please enter your area.',
+    wl_done:'✓ Got it. Thank you — this genuinely helps map where training access is missing.',
+    wl_privacy:'Area and station answers are stored anonymously to map demand. Email is used only to contact you about gyms in your area, and never shared or sold.'
   },
   jp:{
     btn_submit:'+ ジムを登録・確認',
@@ -824,7 +966,29 @@ const I18N={
     banner_refreshed:'✓ 更新完了 — {n}件のジムを同期しました',
     banner_refresh_failed:'⚠ 更新に失敗しました: ',
     banner_link_copied:'✓ リンクをコピーしました',
-    doc_title:'GymReadyMap Japan | 日本のHYROXトレーニングジムマップ（東京・大阪・名古屋）'
+    doc_title:'GymReadyMap Japan | 日本のHYROXトレーニングジムマップ（東京・大阪・名古屋）',
+    search_ph:'ジム名・市区町村・都道府県で検索…',
+    btn_near:'◎ 現在地から',
+    near_locating:'位置情報を取得中…',
+    near_on:'◎ 近い順',
+    near_found:'現在地から近い順に表示しています。最寄り: {n} km',
+    near_none:'現在地から{r} km以内にジムが見つかりませんでした。',
+    near_denied:'位置情報がブロックされています。市区町村や都道府県で検索してください。',
+    near_unsupported:'お使いのブラウザは位置情報に対応していません。市区町村で検索してください。',
+    near_error:'位置情報を取得できませんでした。市区町村で検索してください。',
+    zero_title:'該当するジムがありません',
+    zero_body:'このマップはアスリートの手で1軒ずつ作られています。お近くにジムがない場合、その「空白」こそ記録する価値があります。未対応エリアを見つける手がかりになります。',
+    zero_cta_wait:'トレーニング場所を教える',
+    zero_cta_submit:'+ ジムを登録する',
+    wl_area:'お住まい・トレーニングエリア（市区町村・都道府県）',
+    wl_area_ph:'例: 中野区、札幌市、福岡',
+    wl_email:'メールアドレス（任意 — お近くにジムができたらお知らせします）',
+    wl_email_ph:'you@example.com',
+    wl_stations:'現在トレーニングできないステーション（任意）',
+    wl_submit:'送信',
+    wl_need_area:'エリアをご入力ください。',
+    wl_done:'✓ ありがとうございます。トレーニング環境の空白地帯を把握するうえで大変役立ちます。',
+    wl_privacy:'エリアとステーションの回答は、需要を把握するため匿名で保存されます。メールアドレスはお住まいの地域のジムに関するご連絡のみに使用し、第三者への提供・販売は行いません。'
   }
 };
 
@@ -889,6 +1053,7 @@ function mapsUrlFor(g){
 function applyI18n(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});
   document.querySelectorAll('[data-i18n-title]').forEach(el=>{el.title=t(el.getAttribute('data-i18n-title'));});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.getAttribute('data-i18n-ph'));});
   document.title=t('doc_title');
 }
 
@@ -970,6 +1135,294 @@ let activeGym=null, activeView='map';
 let topFilters={type:'all',region:'all',area:'all',lang:'all',status:'all'};
 let sbFilter='all';
 let map, clusterGroup, markerMap={};
+
+// ════════════════════════════════════════════════════════════
+// DEMAND CAPTURE
+// The map shows what exists. This layer records what people looked
+// for and did NOT find — zero-result searches, and "near me" lookups
+// with no gym within range. That gap data is the thing no one else has.
+// ════════════════════════════════════════════════════════════
+const DEMAND_ENDPOINT='';                 // ← paste the Apps Script /exec URL here
+const DEMAND_QUEUE_KEY='gymready_demand_queue';
+const DEMAND_LOG_KEY='gymready_demand_log';
+const DEMAND_LOG_MAX=500;
+const NEAR_RADIUS_KM=15;
+
+function readLS(k,fb){try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch(e){return fb;}}
+function writeLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+// Groups events from a single visit. Not tied to any identity, dies with the tab.
+const SESSION_ID=(function(){
+  try{
+    let v=sessionStorage.getItem('gymready_sid');
+    if(!v){v=Math.random().toString(36).slice(2,10);sessionStorage.setItem('gymready_sid',v);}
+    return v;
+  }catch(e){return Math.random().toString(36).slice(2,10);}
+})();
+
+function logDemand(type,extra){
+  const ev=Object.assign({
+    type:type,
+    ts:new Date().toISOString(),
+    sid:SESSION_ID,
+    lang:UI_LANG,
+    mobile:isMobile()?1:0,
+    filters:'type='+topFilters.type+';region='+topFilters.region+';status='+topFilters.status+';cov='+sbFilter,
+    referrer:(document.referrer||'').slice(0,120)
+  },extra||{});
+
+  // Local archive first — survives even before the endpoint is wired up.
+  const log=readLS(DEMAND_LOG_KEY,[]);
+  log.push(ev);
+  writeLS(DEMAND_LOG_KEY,log.slice(-DEMAND_LOG_MAX));
+
+  const q=readLS(DEMAND_QUEUE_KEY,[]);
+  q.push(ev);
+  writeLS(DEMAND_QUEUE_KEY,q);
+
+  console.log('[demand]',type,ev);
+  flushDemand();
+}
+
+// Apps Script web apps do not return usable CORS headers, so this posts
+// no-cors and clears optimistically. DEMAND_LOG_KEY keeps a local copy either way.
+function flushDemand(){
+  if(!DEMAND_ENDPOINT){return;}
+  const q=readLS(DEMAND_QUEUE_KEY,[]);
+  if(!q.length) return;
+  fetch(DEMAND_ENDPOINT,{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({events:q})
+  }).then(function(){writeLS(DEMAND_QUEUE_KEY,[]);})
+    .catch(function(e){console.warn('[demand] flush failed:',e.message);});
+}
+
+// Console escape hatch: copy(exportDemand()) → paste straight into a sheet.
+function exportDemand(){
+  const log=readLS(DEMAND_LOG_KEY,[]);
+  if(!log.length) return '';
+  const colMap={};
+  log.forEach(function(e){Object.keys(e).forEach(function(k){colMap[k]=1;});});
+  const cols=Object.keys(colMap);
+  const esc=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"';};
+  return [cols.join(',')].concat(log.map(function(e){
+    return cols.map(function(c){return esc(e[c]);}).join(',');
+  })).join('\n');
+}
+
+// ════════════════════════════════════════════════════════════
+// SEARCH + GEOLOCATION
+// ════════════════════════════════════════════════════════════
+let searchQuery='';
+let userLoc=null;
+let nearMeOn=false;
+
+function haversineKm(la1,lo1,la2,lo2){
+  const R=6371,r=Math.PI/180;
+  const dLa=(la2-la1)*r, dLo=(lo2-lo1)*r;
+  const a=Math.sin(dLa/2)*Math.sin(dLa/2)+
+          Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// Matches across EN and JP fields so "Setagaya", "世田谷" and "sled" all work.
+function matchSearch(g){
+  if(!searchQuery) return true;
+  const q=searchQuery.toLowerCase();
+  return [g.name,g.name_jp,g.ward,g.ward_jp,g.prefecture,g.address,g.address_jp,
+          prefLabel(g),(g.tags||[]).join(' '),(g.tags_jp||[]).join(' ')]
+    .join(' ').toLowerCase().indexOf(q)!==-1;
+}
+
+function syncSearchInputs(){
+  ['search-input','m-search-input'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el&&el.value!==searchQuery) el.value=searchQuery;
+  });
+  ['search-clear','m-search-clear'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('show',searchQuery.length>0);
+  });
+}
+
+function redrawAll(){
+  activeGym=null;
+  closePopup();
+  renderMapMarkers();
+  renderGyms();
+  if(activeView==='list') renderList();
+  if(isMobile()) renderMobileSheet();
+}
+
+// Filtering is instant; the zero-result LOG is debounced so a word being
+// typed one letter at a time does not fire five bogus events.
+let _searchLogTimer=null;
+function onSearchInput(v){
+  searchQuery=String(v||'').trim();
+  syncSearchInputs();
+  redrawAll();
+  clearTimeout(_searchLogTimer);
+  if(searchQuery.length>=2){
+    _searchLogTimer=setTimeout(function(){
+      if(getFiltered().length===0) logDemand('search_zero',{query:searchQuery});
+    },1400);
+  }
+}
+
+function clearSearch(){
+  searchQuery='';
+  syncSearchInputs();
+  redrawAll();
+}
+
+function setNearBtn(on,locating){
+  ['near-btn','m-near-btn'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.classList.toggle('on',!!on);
+    el.classList.toggle('locating',!!locating);
+    el.textContent=locating?t('near_locating'):(on?t('near_on'):t('btn_near'));
+  });
+}
+function setNearNote(msg,isErr){
+  ['near-note','m-near-note'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.textContent=msg||'';
+    el.classList.toggle('err',!!isErr);
+    el.style.display=msg?'block':'none';
+  });
+}
+
+function toggleNearMe(){
+  if(nearMeOn){
+    nearMeOn=false; userLoc=null;
+    setNearBtn(false,false); setNearNote('',false);
+    redrawAll();
+    return;
+  }
+  if(!navigator.geolocation){setNearNote(t('near_unsupported'),true);return;}
+  setNearBtn(false,true);
+  setNearNote(t('near_locating'),false);
+
+  navigator.geolocation.getCurrentPosition(function(pos){
+    userLoc={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    nearMeOn=true;
+    setNearBtn(true,false);
+    redrawAll();
+
+    const list=getFiltered();
+    const nearest=(list.length&&list[0]._dist!=null)?list[0]._dist:null;
+    const unserved=(nearest==null||nearest>NEAR_RADIUS_KM);
+
+    if(unserved){
+      setNearNote(t('near_none').replace('{r}',NEAR_RADIUS_KM),true);
+    } else {
+      setNearNote(t('near_found').replace('{n}',nearest.toFixed(1)),false);
+      map.setView([userLoc.lat,userLoc.lng],12,{animate:true});
+    }
+
+    // Coords rounded to ~1km. Enough for ward-level demand mapping,
+    // not enough to locate anybody.
+    logDemand('near_me',{
+      lat:Math.round(userLoc.lat*100)/100,
+      lng:Math.round(userLoc.lng*100)/100,
+      nearest_km:nearest!=null?Math.round(nearest*10)/10:'',
+      results:list.length,
+      unserved:unserved?1:0
+    });
+  },function(err){
+    setNearBtn(false,false);
+    setNearNote(err.code===1?t('near_denied'):t('near_error'),true);
+    logDemand('near_me_blocked',{code:err.code});
+  },{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+}
+
+// ════════════════════════════════════════════════════════════
+// ZERO-RESULT / DEMAND CARD
+// Shown when nothing matches, or when "near me" finds nothing within range.
+// ════════════════════════════════════════════════════════════
+function demandCardNeeded(filtered){
+  if(!filtered.length) return true;
+  if(nearMeOn&&filtered[0]._dist!=null&&filtered[0]._dist>NEAR_RADIUS_KM) return true;
+  return false;
+}
+
+function zeroResultCard(pfx){
+  const stationChips=snames().map(function(s,i){
+    return '<button class="wl-chip" data-wlst="'+i+'" onclick="toggleWlChip(this)">'+s+'</button>';
+  }).join('');
+  return '<div class="zero-card">'+
+    '<div class="zero-title">'+t('zero_title')+'</div>'+
+    '<div class="zero-body">'+t('zero_body')+'</div>'+
+    '<div class="zero-actions" id="'+pfx+'wl-actions">'+
+      '<button class="zero-btn primary" onclick="openWaitlist(\''+pfx+'\')">'+t('zero_cta_wait')+'</button>'+
+      '<a class="zero-btn" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">'+t('zero_cta_submit')+'</a>'+
+    '</div>'+
+    '<div class="wl-form" id="'+pfx+'wl-form">'+
+      '<div class="wl-label">'+t('wl_area')+'</div>'+
+      '<input type="text" class="wl-input" id="'+pfx+'wl-area" placeholder="'+t('wl_area_ph')+'">'+
+      '<div class="wl-label">'+t('wl_stations')+'</div>'+
+      '<div class="wl-chips">'+stationChips+'</div>'+
+      '<div class="wl-label">'+t('wl_email')+'</div>'+
+      '<input type="email" class="wl-input" id="'+pfx+'wl-email" placeholder="'+t('wl_email_ph')+'">'+
+      '<div class="wl-privacy" id="'+pfx+'wl-err" style="color:var(--red);display:none;"></div>'+
+      '<button class="wl-submit" onclick="submitWaitlist(\''+pfx+'\')">'+t('wl_submit')+'</button>'+
+      '<div class="wl-privacy">'+t('wl_privacy')+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function toggleWlChip(el){el.classList.toggle('on');}
+
+function openWaitlist(pfx){
+  const f=document.getElementById(pfx+'wl-form');
+  if(!f) return;
+  f.classList.add('show');
+  const a=document.getElementById(pfx+'wl-area');
+  if(a) a.focus();
+}
+
+function submitWaitlist(pfx){
+  const form=document.getElementById(pfx+'wl-form');
+  const areaEl=document.getElementById(pfx+'wl-area');
+  const errEl=document.getElementById(pfx+'wl-err');
+  if(!form||!areaEl) return;
+
+  const area=(areaEl.value||'').trim();
+  if(!area){
+    areaEl.style.borderColor='var(--red)';
+    if(errEl){errEl.textContent=t('wl_need_area');errEl.style.display='block';}
+    areaEl.focus();
+    return;
+  }
+  if(errEl) errEl.style.display='none';
+  areaEl.style.borderColor='';
+
+  // Station names logged in English regardless of UI language, so the
+  // sheet stays analysable in one vocabulary.
+  const chips=form.querySelectorAll('.wl-chip.on');
+  const need=Array.prototype.map.call(chips,function(c){
+    return SNAMES[parseInt(c.getAttribute('data-wlst'),10)];
+  }).join('; ');
+
+  const emailEl=document.getElementById(pfx+'wl-email');
+  const email=emailEl?(emailEl.value||'').trim():'';
+
+  logDemand('waitlist',{
+    area:area,
+    email:email,
+    stations_needed:need,
+    query:searchQuery,
+    lat:userLoc?Math.round(userLoc.lat*100)/100:'',
+    lng:userLoc?Math.round(userLoc.lng*100)/100:''
+  });
+
+  form.innerHTML='<div class="wl-done">'+t('wl_done')+'</div>';
+  const act=document.getElementById(pfx+'wl-actions');
+  if(act) act.style.display='none';
+}
 
 // ── COLORS ──
 function cc(g){
@@ -1058,7 +1511,16 @@ function matchSb(g){
   if(sbFilter==='unverified') return g.stations===null;
   return true;
 }
-function getFiltered(){return gyms.filter(g=>matchTop(g)&&matchSb(g));}
+function getFiltered(){
+  const out=gyms.filter(g=>matchTop(g)&&matchSb(g)&&matchSearch(g));
+  if(nearMeOn&&userLoc){
+    out.forEach(g=>{g._dist=haversineKm(userLoc.lat,userLoc.lng,g.lat,g.lng);});
+    out.sort((a,b)=>a._dist-b._dist);
+  } else {
+    out.forEach(g=>{g._dist=null;});
+  }
+  return out;
+}
 
 // ── CUSTOM MARKER ICON ──
 function createMarkerIcon(g){
@@ -1247,7 +1709,8 @@ function copyGymLink(id){
 // ── GYM LIST (sidebar) ──
 function renderGyms(){
   const filtered=getFiltered();
-  document.getElementById('panel-gyms').innerHTML=filtered.map(g=>{
+  const demandHTML=demandCardNeeded(filtered)?zeroResultCard('d-'):'';
+  document.getElementById('panel-gyms').innerHTML=demandHTML+filtered.map(g=>{
     const stationLabel=g.stations!==null?g.stations+'/8':'TBC';
     const dotsHTML=g.has?
       g.has.map(s=>`<div class="gd ${s?'gd-on':'gd-off'}"></div>`).join(''):
@@ -1267,7 +1730,7 @@ function renderGyms(){
           <div class="gi-name">${gname(g)}</div>
           <div class="gi-badge ${bc(g)}">${stationLabel}</div>
         </div>
-        <div class="gi-area">${gward(g)} · ${prefLabel(g)}</div>
+        <div class="gi-area">${gward(g)} · ${prefLabel(g)}${g._dist!=null?' · <span class="gi-dist">'+g._dist.toFixed(1)+' km</span>':''}</div>
         <div class="gi-dots">${dotsHTML}</div>
         <div class="gi-status" style="flex-wrap:wrap;gap:4px;">${officialBadge}${verifiedBadge}${langBadge}</div>
       </div>
@@ -1399,6 +1862,8 @@ function setSbFilter(val,btn){
 function clearAllFilters(){
   topFilters={type:'all',region:'all',area:'all',lang:'all',status:'all'};
   sbFilter='all';
+  searchQuery='';
+  syncSearchInputs();
   activeGym=null;
   closePopup();
   // Reset all top filter buttons
@@ -1498,7 +1963,8 @@ function renderMobileSheet(){
   const filtered=getFiltered();
   document.getElementById('mobile-count').textContent=filtered.length;
 
-  document.getElementById('sheet-gym-list').innerHTML=filtered.map(g=>{
+  const demandHTML=demandCardNeeded(filtered)?zeroResultCard('m-'):'';
+  document.getElementById('sheet-gym-list').innerHTML=demandHTML+filtered.map(g=>{
     const stLbl=g.stations!==null?g.stations+'/8':'TBC';
     const dotsHTML=g.has?
       g.has.map(s=>`<div class="sgi-d" style="background:${s?'#00e676':'var(--muted2)'};${s?'box-shadow:0 0 3px #00e676':''}"></div>`).join(''):
@@ -1508,7 +1974,7 @@ function renderMobileSheet(){
       <div class="sgi-dot" style="background:${cc(g)};box-shadow:0 0 6px ${cc(g)}90;"></div>
       <div class="sgi-body">
         <div class="sgi-name">${gname(g)}</div>
-        <div class="sgi-sub">${gward(g)} · ${prefLabel(g)}</div>
+        <div class="sgi-sub">${gward(g)} · ${prefLabel(g)}${g._dist!=null?' · <span class="gi-dist">'+g._dist.toFixed(1)+' km</span>':''}</div>
         <div class="sgi-dots">${dotsHTML}</div>
       </div>
       <span class="sgi-badge ${bc(g)}">${stLbl}</span>
@@ -1611,6 +2077,8 @@ function setDrawerFilter(group,val,btn){
 function mobileClearFilters(){
   topFilters={type:'all',region:'all',area:'all',lang:'all',status:'all'};
   sbFilter='all';
+  searchQuery='';
+  syncSearchInputs();
   document.querySelectorAll('.mfd-chip').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('.mfd-chip[data-dval="all"]').forEach(b=>b.classList.add('on'));
   renderMapMarkers();
@@ -1911,6 +2379,8 @@ async function boot(){
   initMap();
   map.on('movestart',onMapMove);
   renderGyms();
+  syncSearchInputs();
+  flushDemand();          // retry anything queued from a previous visit
   setTimeout(initMobile,100);
 
   // Deep link: ?gym=ID flies to that gym and opens its card
