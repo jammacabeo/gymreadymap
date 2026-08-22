@@ -193,7 +193,7 @@ const NEAR_RADIUS_KM=15;                  // "unserved" threshold
 
 - [x] Event capture and local archive
 - [x] CSV export helper
-- [ ] `DEMAND_ENDPOINT` wired to an Apps Script webhook
-- [ ] `demand_log` tab on `GymReadyMap_Japan_Database_2026`
-- [ ] Email notification on `waitlist` events only
+- [x] `DEMAND_ENDPOINT` wired to an Apps Script webhook
+- [x] `demand_log` tab on `GymReadyMap_Japan_Database_2026`
+- [x] Email notification on `waitlist` events only
 - [ ] Enough accumulated volume to say anything with confidence
