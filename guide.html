@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>How to Use GymReadyMap — Reading HYROX Station Data for Japan Gyms</title>
+<meta name="description" content="How to read the map: what 8/8 means, what equipment each HYROX station needs, and how to filter Japan gyms by region, language and verification status.">
+<meta name="keywords" content="HYROX ステーション 種目, HYROX 練習 場所, スキーエルグ ジム 東京, サンドバッグランジ, スレッドプッシュ ジム, HYROX training Japan, sled push gym Tokyo, SkiErg Japan, HYROX gym guide">
+<link rel="canonical" href="https://gymreadymap.com/guide">
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://gymreadymap.com/guide">
+<meta property="og:title" content="How to Use GymReadyMap — Reading HYROX Station Data for Japan Gyms">
+<meta property="og:description" content="What 8/8 means, what equipment each HYROX station needs, and how to find a gym in Japan that covers the stations you cannot train.">
+<meta property="og:site_name" content="GymReadyMap Japan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Use GymReadyMap">
+<meta name="twitter:description" content="What 8/8 means, what each HYROX station needs, and how to filter Japan gyms by equipment.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"GymReadyMap Japan","item":"https://gymreadymap.com/"},
+    {"@type":"ListItem","position":2,"name":"Guide","item":"https://gymreadymap.com/guide"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is GymReadyMap free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Free to use, free to be listed, free to be verified. There is no paid tier for gyms."}},
+    {"@type":"Question","name":"Does a gym need to be a HYROX affiliate to be on the map?","acceptedAnswer":{"@type":"Answer","text":"No. Affiliated clubs are marked Official. Independent gyms with the right equipment are marked HYROX Ready. Affiliation and equipment are different questions."}},
+    {"@type":"Question","name":"What does 8/8 mean on GymReadyMap?","acceptedAnswer":{"@type":"Answer","text":"The gym can cover all eight HYROX stations, so a full race simulation is possible there."}},
+    {"@type":"Question","name":"Can I train for HYROX at an ordinary Japanese gym?","acceptedAnswer":{"@type":"Answer","text":"Mostly. Rowing, burpee broad jumps, farmers carry and wall balls are widely available in Japan. SkiErg and sled push or pull are the constraints, and they are the reason to check a map before buying a membership."}},
+    {"@type":"Question","name":"Where can I find the official HYROX station weights and standards?","acceptedAnswer":{"@type":"Answer","text":"In the official HYROX rulebook, published as a PDF at maintain.hyrox.com. That document is the authority on divisions, weights and movement standards, and it is revised periodically, so check it directly before a race."}},
+    {"@type":"Question","name":"How often is the gym data updated?","acceptedAnswer":{"@type":"Answer","text":"The map reads live from the source database on every load. Each gym card shows the date that specific gym was last confirmed."}},
+    {"@type":"Question","name":"How do I get my gym listed on GymReadyMap?","acceptedAnswer":{"@type":"Answer","text":"Submit it through the Submit/Verify a Gym form. Listing and verification are free and cannot be paid for."}}
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2128; --border:#30363d;
+  --accent:#e8ff00; --accent-dim:rgba(232,255,0,0.08);
+  --text:#e6edf3; --muted:#a8b3bf; --muted2:#6e7681;
+  --green:#00e676; --orange:#ff9100; --orange2:#ff6600; --red:#ff3d00;
+  --blue:#4da6ff; --verified:#00e676; --unverified:#ff3d00;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:88px;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+/* ── JP TYPOGRAPHY ── Barlow has no kana/kanji; Noto Sans JP fills the gap. */
+html.jp body{font-family:'Barlow','Noto Sans JP',sans-serif;line-height:1.9;}
+html.jp .logo-name,html.jp .nav a,html.jp .submit-btn-header,html.jp h1,html.jp h2,html.jp h3,html.jp .st-num,html.jp .kicker,html.jp th{font-family:'Barlow Condensed','Noto Sans JP',sans-serif;}
+html.jp .kicker,html.jp .logo-sub,html.jp th{letter-spacing:.08em;}
+html.jp h1,html.jp h2,html.jp h3{letter-spacing:.02em;}
+
+/* ── HEADER (sticky) ── */
+.header{
+  position:sticky;top:0;z-index:1000;
+  height:64px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:26px;padding:0 24px;
+}
+.header::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent) 40%,transparent);opacity:.6;}
+.brand{text-decoration:none;flex-shrink:0;}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1;}
+.logo-sub{font-size:.55rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+
+.nav{display:flex;align-items:center;gap:22px;flex:1;}
+.nav a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 0;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;
+}
+.nav a:hover{color:var(--text);}
+.nav a.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+.header-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.lang-toggle{display:inline-flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.lang-toggle button{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;
+  padding:9px 13px;background:transparent;color:var(--muted);border:none;cursor:pointer;transition:all .15s;line-height:1;
+}
+.lang-toggle button:hover{color:var(--accent);}
+.lang-toggle button.on{background:var(--accent);color:#000;}
+.submit-btn-header{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:9px 20px;border:1px solid rgba(232,255,0,.4);background:rgba(232,255,0,.08);color:var(--accent);
+  border-radius:3px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;white-space:nowrap;
+}
+.submit-btn-header:hover{background:rgba(232,255,0,.16);border-color:var(--accent);}
+
+/* ── PAGE SHELL ── */
+.wrap{max-width:840px;margin:0 auto;padding:52px 24px 90px;}
+.kicker{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.6rem;line-height:1.08;letter-spacing:.02em;text-transform:uppercase;margin-bottom:18px;}
+.lede{font-size:1.08rem;color:var(--muted);max-width:64ch;}
+.lede strong{color:var(--text);font-weight:600;}
+h2{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.55rem;letter-spacing:.06em;text-transform:uppercase;
+  margin:56px 0 16px;padding-bottom:9px;border-bottom:1px solid var(--border);scroll-margin-top:92px;
+}
+h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.05em;margin:0 0 8px;color:var(--text);scroll-margin-top:92px;}
+h3.sub{margin:26px 0 8px;color:var(--accent);}
+p{margin-bottom:14px;max-width:68ch;}
+a{color:var(--accent);}
+a:hover{color:#fff;}
+strong{color:var(--text);font-weight:600;}
+ul,ol{margin:0 0 16px 20px;max-width:68ch;}
+li{margin-bottom:7px;}
+
+/* ── TOC ── */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:18px 22px;margin:34px 0 10px;}
+.toc-t{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin-bottom:11px;}
+.toc ul{list-style:none;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:3px 22px;}
+.toc li{margin:0;}
+.toc a{font-size:.92rem;text-decoration:none;color:var(--muted);border-bottom:1px solid transparent;}
+.toc a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── STATION CARDS ── */
+.station{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:20px 22px;margin-bottom:14px;}
+.st-head{display:flex;align-items:baseline;gap:11px;margin-bottom:12px;flex-wrap:wrap;}
+.st-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.5rem;color:var(--accent);line-height:1;}
+.st-head h3{margin:0;font-size:1.22rem;}
+.st-jp{font-size:.9rem;color:var(--muted2);}
+.st-row{display:grid;grid-template-columns:120px 1fr;gap:6px 16px;font-size:.95rem;}
+.st-row dt{font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);padding-top:5px;}
+.st-row dd{color:var(--muted);}
+.st-row dd strong{color:var(--text);}
+
+/* ── TABLES ── */
+table{width:100%;border-collapse:collapse;margin:6px 0 20px;font-size:.95rem;}
+th{
+  font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted2);text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);
+}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle;}
+td strong{color:var(--text);}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:9px;vertical-align:-1px;}
+.sq{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:9px;vertical-align:-1px;}
+
+/* ── CALLOUT ── */
+.note{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:16px 20px;margin:22px 0;}
+.note p{margin:0;color:var(--text);}
+.note p+p{margin-top:10px;}
+
+/* ── FAQ ── */
+.faq{border-bottom:1px solid var(--border);padding:16px 0;}
+.faq h3{margin-bottom:5px;color:var(--accent);}
+.faq p{margin:0;color:var(--muted);}
+
+/* ── FOOTER ── */
+.foot{border-top:1px solid var(--border);background:var(--surface);padding:34px 24px 44px;margin-top:20px;}
+.foot-in{max-width:840px;margin:0 auto;}
+.foot-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:18px;}
+.foot-links a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+}
+.foot-links a:hover{color:var(--accent);}
+.foot-tm{font-size:.78rem;color:var(--muted2);line-height:1.65;max-width:70ch;}
+.foot-tm a{color:var(--muted);}
+
+/* ── LANGUAGE VISIBILITY ── */
+.jp-only{display:none;}
+html.jp .en-only{display:none;}
+html.jp .jp-only{display:block;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1020px){ .logo-sub{display:none;} .nav{gap:16px;} }
+@media(max-width:820px){
+  .header{height:auto;flex-wrap:wrap;gap:12px 18px;padding:11px 16px;}
+  .nav{order:3;width:100%;gap:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  .nav::-webkit-scrollbar{display:none;}
+  .header-right{margin-left:auto;}
+  html{scroll-padding-top:130px;}
+  h2{scroll-margin-top:134px;}
+  h3{scroll-margin-top:134px;}
+}
+@media(max-width:620px){
+  .wrap{padding:34px 18px 70px;}
+  h1{font-size:2rem;}
+  h2{font-size:1.3rem;margin-top:44px;}
+  .toc ul{grid-template-columns:1fr;}
+  .st-row{grid-template-columns:1fr;gap:2px;}
+  .st-row dt{padding-top:9px;}
+  .submit-btn-header{padding:8px 13px;font-size:.64rem;}
+  .logo-name{font-size:1.15rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+  <a class="brand" href="/">
+    <div class="logo-name">GYM READY MAP</div>
+    <div class="logo-sub">Intelligence map for HYROX® races · Japan</div>
+  </a>
+  <nav class="nav">
+    <a href="/"><span class="en-only">Map</span><span class="jp-only">マップ</span></a>
+    <a href="/guide" class="active"><span class="en-only">Guide</span><span class="jp-only">使い方</span></a>
+    <a href="/about"><span class="en-only">About</span><span class="jp-only">概要</span></a>
+  </nav>
+  <div class="header-right">
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="en" onclick="setLang('en')">EN</button>
+      <button data-lang="jp" onclick="setLang('jp')">JP</button>
+    </div>
+    <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">
+      <span class="en-only">+ Submit/Verify a Gym</span><span class="jp-only">+ ジムを登録・確認</span>
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════ ENGLISH ═══════════ -->
+<div class="en-only">
+
+  <div class="kicker">Guide</div>
+  <h1>How to use GymReadyMap</h1>
+  <p class="lede">GymReadyMap shows where you can actually train the eight HYROX stations in Japan — station by station, gym by gym. This page explains what the map is showing you and how to get to a useful answer in under a minute.<br><br><strong>In one line:</strong> find a gym near you, check which of the eight stations it covers, go train.</p>
+
+  <div class="toc">
+    <div class="toc-t">On this page</div>
+    <ul>
+      <li><a href="#stations">The eight stations</a></li>
+      <li><a href="#reading">Reading the map</a></li>
+      <li><a href="#filters">Filters</a></li>
+      <li><a href="#search">Search and Near me</a></li>
+      <li><a href="#views">Map view vs List view</a></li>
+      <li><a href="#mobile">On mobile</a></li>
+      <li><a href="#verified">What "Verified" means</a></li>
+      <li><a href="#nothing">If nothing is near you</a></li>
+      <li><a href="#owners">Contributing to the map</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+
+  <h2 id="stations">The eight HYROX stations, and what a gym needs</h2>
+  <p>A HYROX race is eight runs of 1&nbsp;km, each followed by one station. Most Japanese gyms can cover four or five of them. Two or three are genuinely hard to find — which is exactly why this map exists.</p>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">01</span><h3>SkiErg</h3><span class="st-jp">スキーエルグ</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A <strong>Concept2 SkiErg</strong>. Not a rowing machine, not a cable pulldown.</dd>
+      <dt>Race distance</dt><dd>1,000 m</dd>
+      <dt>In Japan</dt><dd>Limited. Common in CrossFit boxes and HYROX-affiliated gyms, rare in commercial chains.</dd>
+      <dt>If missing</dt><dd>Banded straight-arm pulldowns build the pattern, but pacing cannot be replicated. Worth travelling for once a week.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">02</span><h3>Sled Push</h3><span class="st-jp">スレッドプッシュ</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A weight sled and roughly <strong>12.5 m of push lane</strong> — turf, rubber or smooth flat floor.</dd>
+      <dt>Race distance</dt><dd>50 m (4 × 12.5 m)</dd>
+      <dt>In Japan</dt><dd>The hardest station to find. It is a floor-space problem, not an equipment problem: most Tokyo gyms are basement units without a straight 12 m lane.</dd>
+      <dt>If missing</dt><dd>Heavy leg press and prowler-pattern work help, but nothing substitutes for loaded horizontal pushing. This is the most common reason athletes here travel to train.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">03</span><h3>Sled Pull</h3><span class="st-jp">スレッドプル</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A sled, a rope, and the same lane length.</dd>
+      <dt>Race distance</dt><dd>50 m (4 × 12.5 m)</dd>
+      <dt>In Japan</dt><dd>Almost always paired with sled push. If a gym has one, it usually has both.</dd>
+      <dt>If missing</dt><dd>Seated rope pulls with a heavy attachment approximate the pull; the lower-body brace does not transfer.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">04</span><h3>Burpee Broad Jump</h3><span class="st-jp">バーピーブロードジャンプ</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>No equipment — but <strong>15–20 m of clear lane</strong> and a ceiling you will not hit.</dd>
+      <dt>Race distance</dt><dd>80 m</dd>
+      <dt>In Japan</dt><dd>The only station needing zero equipment, yet low-ceiling basement gyms and mat-only studios make it awkward. Check the notes on a gym's card.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">05</span><h3>Rowing</h3><span class="st-jp">ローイング</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A <strong>Concept2 rower</strong>.</dd>
+      <dt>Race distance</dt><dd>1,000 m</dd>
+      <dt>In Japan</dt><dd>The widest availability of the eight. Most gyms on this map have one.</dd>
+      <dt>If missing</dt><dd>Rare — and any commercial gym with an erg covers this station on its own.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">06</span><h3>Farmers Carry</h3><span class="st-jp">ファーマーズキャリー</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>Two kettlebells — <strong>2 × 16 kg</strong> open women, <strong>2 × 24 kg</strong> open men and pro women, <strong>2 × 32 kg</strong> pro men.</dd>
+      <dt>Race distance</dt><dd>200 m</dd>
+      <dt>In Japan</dt><dd>Common in CrossFit boxes and functional gyms. Many commercial chains stop at 20 kg or 24 kg, which caps what pro men can train.</dd>
+      <dt>If missing</dt><dd>Dumbbells of equivalent load work. The grip demand is the point.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">07</span><h3>Sandbag Lunges</h3><span class="st-jp">サンドバッグランジ</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A sandbag — <strong>10 kg</strong> open women, <strong>20 kg</strong> open men and pro women, <strong>30 kg</strong> pro men. Weight vests and barbells are not equivalent; the shifting load is the whole challenge.</dd>
+      <dt>Race distance</dt><dd>100 m</dd>
+      <dt>In Japan</dt><dd>Limited. Sandbags are cheap but uncommon in commercial gyms.</dd>
+      <dt>If missing</dt><dd>A loaded backpack works better than nothing, and is what a lot of athletes here actually do.</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">08</span><h3>Wall Balls</h3><span class="st-jp">ウォールボール</span></div>
+    <dl class="st-row">
+      <dt>Needs</dt><dd>A med ball — <strong>4 kg</strong> open women, <strong>6 kg</strong> open men and pro women, <strong>9 kg</strong> pro men — and a target at <strong>2.70 m</strong> for women and pro women, <strong>3.00 m</strong> for men and pro men. The real constraint is a wall you are allowed to throw at.</dd>
+      <dt>Race reps</dt><dd>100</dd>
+      <dt>In Japan</dt><dd>Common in CrossFit boxes, uncommon elsewhere. Many gyms have the ball but no legal throwing wall.</dd>
+    </dl>
+  </div>
+
+  <div class="note">
+    <p><strong>The realistic pattern in Japan:</strong> most athletes cover rowing, burpees, farmers carry and wall balls at their home gym, then travel for SkiErg and sled work.</p>
+    <p>Open a gym's card and read its station grid to see exactly which of the eight it covers, then use the filters below to narrow by region, language and verification status.</p>
+  </div>
+
+  <p><strong>Weights, distances and movement standards above follow the official HYROX rulebook.</strong> Divisions change and standards get revised, so always check the current source before a race: <a href="https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf" target="_blank" rel="noopener noreferrer">HYROX Rulebook — Singles (PDF, English)</a>.</p>
+
+  <h2 id="reading">Reading the map</h2>
+  <p><strong>Marker colour = how many of the eight stations that gym covers.</strong></p>
+  <table>
+    <thead><tr><th>Marker</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></span><strong>Green</strong></td><td>8/8 — Full Race Sim</td></tr>
+      <tr><td><span class="dot" style="background:#ff9100;box-shadow:0 0 5px #ff9100"></span><strong>Amber</strong></td><td>6–7/8 — Near Complete</td></tr>
+      <tr><td><span class="dot" style="background:#ff6600;box-shadow:0 0 5px #ff6600"></span><strong>Orange</strong></td><td>4–5/8 — Partial</td></tr>
+      <tr><td><span class="dot" style="background:#ff3d00;box-shadow:0 0 5px #ff3d00"></span><strong>Red</strong></td><td>1–3/8 — Limited</td></tr>
+      <tr><td><span class="dot" style="background:#484f58"></span><strong>Grey, marked ?</strong></td><td>Unverified — TBC</td></tr>
+    </tbody>
+  </table>
+  <p>A grey <strong>?</strong> marker does <strong>not</strong> mean a bad gym. It means nobody has confirmed its equipment yet. Those gyms are on the map because they exist and athletes should know about them — the station data catches up as verification proceeds.</p>
+
+  <p><strong>Marker ring</strong></p>
+  <ul>
+    <li><span class="sq" style="background:var(--accent)"></span><strong>Yellow ring — ★ Official:</strong> a HYROX-affiliated training club.</li>
+    <li><span class="sq" style="background:var(--blue)"></span><strong>Blue ring — HYROX® Ready:</strong> not affiliated, but equipped to train the stations.</li>
+  </ul>
+
+  <p><strong>Status dot</strong></p>
+  <ul>
+    <li><span class="dot" style="background:var(--verified)"></span><strong>Green — ✓ Verified:</strong> equipment confirmed directly with the gym.</li>
+    <li><span class="dot" style="background:var(--unverified)"></span><strong>Red — Unverified:</strong> listed from public information, not yet confirmed.</li>
+  </ul>
+
+  <p><strong>Numbered circles</strong> are clusters. Zoom in, or click the circle, to break them apart. A <strong>87</strong> over Tokyo means 87 gyms in that view, not one gym.</p>
+  <p><strong>Clicking a gym</strong> opens its card: station grid, address, hours, phone, email, website, tags and the last verification date.</p>
+
+  <h2 id="filters">Filters</h2>
+  <p>Filters sit in the bar under the header and stack — set several at once, then use <strong>✕ Clear</strong> to reset everything.</p>
+  <ul>
+    <li><strong>Type</strong> — All / Official / HYROX® Ready. Affiliated clubs versus well-equipped independents.</li>
+    <li><strong>Region</strong> — All / Kanto / Kansai / Chubu.</li>
+    <li><strong>Language</strong> — All / EN / JP / EN/JP. Whether staff can handle your booking and coaching in English. If you do not read Japanese, start here.</li>
+    <li><strong>Status</strong> — All / Verified / Unverified. Set this to Verified when you need the station data to be reliable.</li>
+  </ul>
+  <p>The counters at the bottom of the list — <strong>Shown / Verified / Unverified</strong> — update with every filter, so you can see how much of the current view is confirmed data.</p>
+
+  <h2 id="search">Search and Near me</h2>
+  <p><strong>Search</strong> matches gym name, ward, city, prefecture, address and tags — in both scripts. <strong>Setagaya</strong>, <strong>世田谷</strong> and <strong>sled</strong> all return results. You do not need to switch UI language to search in the other one.</p>
+  <p><strong>◎ Near me</strong> asks your browser for your location, sorts every result by straight-line distance and shows the kilometres to each. If nothing falls within 15 km, you get a short form instead of an empty screen — see <a href="#nothing">below</a>.</p>
+  <p>If you decline the location prompt or your browser blocks it, search by ward or prefecture instead. Nothing is lost.</p>
+
+  <h2 id="views">Map view vs List view</h2>
+  <p><strong>🗺 Map View</strong> answers <em>where</em>. <strong>☰ List View</strong> answers <em>which</em> — a table of gym, coverage, stations, notes and tags. If you are comparing five gyms on equipment rather than location, use List View.</p>
+
+  <h2 id="mobile">On mobile</h2>
+  <p>The map fills the screen and results live in a bottom sheet. Drag the handle up for the full list, down to see more map. Search and <strong>◎ Near me</strong> sit inside the sheet. <strong>⚙ Filters</strong> opens a drawer; <strong>← Back</strong> returns from a gym's detail panel to the list.</p>
+
+  <h2 id="verified">What "Verified" means here</h2>
+  <p>A <strong>✓ Verified</strong> gym has had its equipment confirmed directly with that gym — not inferred from its website or Instagram. Each verified entry carries a date, because equipment changes.</p>
+  <p>An <strong>Unverified</strong> gym is listed from public sources. It may be excellent. It simply has not been checked yet, and the map says so rather than guessing.</p>
+  <p>The full methodology is on the <a href="/about">About page</a>.</p>
+
+  <h2 id="nothing">If there is no gym near you</h2>
+  <p>An empty result is data. When a search returns nothing, or Near me finds nothing within 15 km, the map offers a short form: your area, and which stations you cannot currently train.</p>
+  <p>That record is the point. Coverage gaps in Japan are invisible until somebody writes them down, and this is how underserved areas get found — and how gyms and organisers learn where demand exists.</p>
+  <p>Area and station answers are stored anonymously. An email address is optional and used only to tell you when a gym opens near you. Never shared, never sold.</p>
+
+  <h2 id="owners">Contributing to the map</h2>
+  <p>This map is built by athletes, gym by gym. Two routes in.</p>
+
+  <h3 class="sub">If you have trained at a gym on this map</h3>
+  <p>You already know things its listing does not. If the station data is wrong, incomplete, or missing entirely — a sled that is no longer there, a SkiErg that is, a lane too short to use — <a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">tell us</a>. The same form handles corrections and new gyms, and athlete reports are how most of this map gets built.</p>
+
+  <h3 class="sub">If you own or coach at a gym</h3>
+  <p>Listing is free and always will be. Verification is free. Neither can be bought, and no payment affects your badges, station data or position in results.</p>
+  <ul>
+    <li><strong>List or correct a gym:</strong> <a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">Submit/Verify a Gym</a></li>
+    <li><strong>Something wrong on your entry?</strong> Email <a href="mailto:jam@gymreadymap.com">jam@gymreadymap.com</a> and it gets fixed.</li>
+    <li><strong>Coach profiles:</strong> opening soon.</li>
+  </ul>
+
+  <h2 id="faq">FAQ</h2>
+  <div class="faq"><h3>Is GymReadyMap free?</h3><p>Yes. Free to use, free to be listed, free to be verified. There is no paid tier for gyms.</p></div>
+  <div class="faq"><h3>Does a gym need to be a HYROX affiliate to be on the map?</h3><p>No. Affiliated clubs are marked ★ Official. Independent gyms with the right equipment are marked HYROX® Ready. Both matter — affiliation and equipment are different questions.</p></div>
+  <div class="faq"><h3>What does 8/8 mean?</h3><p>The gym can cover all eight HYROX stations, so you can run a full race simulation there.</p></div>
+  <div class="faq"><h3>Can I train for HYROX at an ordinary Japanese gym?</h3><p>Mostly. Rowing, burpee broad jumps, farmers carry and wall balls are widely available. SkiErg and sled work are the constraints, and they are the reason to check a map before you buy a membership.</p></div>
+  <div class="faq"><h3>How often is the data updated?</h3><p>The map reads live from the source database on every load. Verification dates on each gym card tell you when that specific gym was last confirmed.</p></div>
+  <div class="faq"><h3>Where can I find the official station weights and standards?</h3><p>In the HYROX rulebook: <a href="https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf" target="_blank" rel="noopener noreferrer">HYROX Rulebook — Singles (PDF, English)</a>. That document is the authority on divisions, weights and movement standards. This guide follows it, but the rulebook is revised periodically — check it directly before a race.</p></div>
+  <div class="faq"><h3>Who runs this?</h3><p>An independent HYROX athlete in Tokyo — not HYROX, and not any gym chain. See <a href="/about">About</a>.</p></div>
+  <div class="faq"><h3>How do I get my gym listed?</h3><p><a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">Submit the form</a>. It takes about two minutes.</p></div>
+
+</div>
+
+<!-- ═══════════ 日本語 ═══════════ -->
+<div class="jp-only">
+
+  <div class="kicker">使い方</div>
+  <h1>GymReadyMapの使い方</h1>
+  <p class="lede">GymReadyMapは、日本国内でHYROXの8種目をどこで実際にトレーニングできるかを、ジムごと・ステーションごとに示すマップです。このページでは、マップの見方と、1分以内に答えにたどり着く方法を説明します。<br><br><strong>一言で:</strong> 近くのジムを探す → 8種目のうち何種目に対応しているか確認する → トレーニングに行く。</p>
+
+  <div class="toc">
+    <div class="toc-t">このページの内容</div>
+    <ul>
+      <li><a href="#stations-jp">HYROXの8種目</a></li>
+      <li><a href="#reading-jp">マップの見方</a></li>
+      <li><a href="#filters-jp">絞り込み</a></li>
+      <li><a href="#search-jp">検索と現在地から</a></li>
+      <li><a href="#views-jp">マップ表示とリスト表示</a></li>
+      <li><a href="#mobile-jp">スマートフォンでの使い方</a></li>
+      <li><a href="#verified-jp">「確認済み」の意味</a></li>
+      <li><a href="#nothing-jp">近くにジムがない場合</a></li>
+      <li><a href="#owners-jp">マップへの情報提供</a></li>
+      <li><a href="#faq-jp">よくある質問</a></li>
+    </ul>
+  </div>
+
+  <h2 id="stations-jp">HYROXの8種目と、必要な器具</h2>
+  <p>HYROXは1kmのランを8本、その合間に1種目ずつ挟むレースです。日本のジムの多くは4〜5種目に対応しています。残りの2〜3種目が本当に見つかりにくく、このマップが存在する理由でもあります。</p>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">01</span><h3>スキーエルグ</h3><span class="st-jp">SkiErg</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd><strong>Concept2のスキーエルグ</strong>。ローイングマシンやケーブルプルダウンでは代替できません。</dd>
+      <dt>レース距離</dt><dd>1,000m</dd>
+      <dt>日本での普及度</dt><dd>限定的。CrossFitボックスやHYROX提携ジムには多いものの、大手チェーンではほぼ見かけません。</dd>
+      <dt>ない場合</dt><dd>バンドを使ったストレートアームプルダウンで動作パターンは作れますが、ペース感覚は再現できません。週1回は移動してでも触る価値があります。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">02</span><h3>スレッドプッシュ</h3><span class="st-jp">Sled Push</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>ウェイトスレッドと、<strong>約12.5mの直線レーン</strong>（ターフ・ラバー・平滑な床）。</dd>
+      <dt>レース距離</dt><dd>50m（12.5m × 4本）</dd>
+      <dt>日本での普及度</dt><dd>8種目で最も見つけにくい種目。器具ではなくスペースの問題です。都内のジムの多くは地下フロアで、12mの直線が取れません。</dd>
+      <dt>ない場合</dt><dd>高重量レッグプレスやプラウラー系の動作が近いものの、荷重した水平push動作の代替にはなりません。日本のアスリートが遠征する最大の理由がこれです。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">03</span><h3>スレッドプル</h3><span class="st-jp">Sled Pull</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>スレッド、ロープ、同じくレーンの長さ。</dd>
+      <dt>レース距離</dt><dd>50m（12.5m × 4本）</dd>
+      <dt>日本での普及度</dt><dd>ほぼ必ずスレッドプッシュとセット。片方があれば両方あると考えて構いません。</dd>
+      <dt>ない場合</dt><dd>高重量アタッチメントを使ったシーテッドローププルが近いですが、下半身の踏ん張りは再現できません。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">04</span><h3>バーピーブロードジャンプ</h3><span class="st-jp">Burpee Broad Jump</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>器具は不要。ただし<strong>15〜20m程度の直線スペース</strong>と、頭をぶつけない天井高が必要です。</dd>
+      <dt>レース距離</dt><dd>80m</dd>
+      <dt>日本での普及度</dt><dd>唯一器具が要らない種目ですが、天井の低い地下ジムやマットのみのスタジオでは実施が難しい場合があります。各ジムのカードの備考欄をご確認ください。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">05</span><h3>ローイング</h3><span class="st-jp">Row</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd><strong>Concept2のローイングマシン</strong>。</dd>
+      <dt>レース距離</dt><dd>1,000m</dd>
+      <dt>日本での普及度</dt><dd>8種目中最も高い。このマップ上のジムのほとんどが対応しています。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">06</span><h3>ファーマーズキャリー</h3><span class="st-jp">Farmers Carry</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>ケトルベル2個 — オープン女子<strong>16kg×2</strong>、オープン男子およびプロ女子<strong>24kg×2</strong>、プロ男子<strong>32kg×2</strong>。</dd>
+      <dt>レース距離</dt><dd>200m</dd>
+      <dt>日本での普及度</dt><dd>CrossFitボックスやファンクショナルジムでは一般的。大手チェーンでは20kg・24kg止まりのことが多く、プロ男子の重量に届きません。</dd>
+      <dt>ない場合</dt><dd>同重量のダンベルで代替可能。グリップへの負荷が本質です。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">07</span><h3>サンドバッグランジ</h3><span class="st-jp">Sandbag Lunges</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>サンドバッグ — オープン女子<strong>10kg</strong>、オープン男子およびプロ女子<strong>20kg</strong>、プロ男子<strong>30kg</strong>。ウェイトベストやバーベルでは代替になりません。荷重が動くことそのものが負荷だからです。</dd>
+      <dt>レース距離</dt><dd>100m</dd>
+      <dt>日本での普及度</dt><dd>限定的。サンドバッグ自体は安価ですが、商業ジムにはあまり置かれていません。</dd>
+      <dt>ない場合</dt><dd>荷物を詰めたバックパックが現実的な代替で、実際に多くのアスリートがそうしています。</dd>
+    </dl>
+  </div>
+
+  <div class="station">
+    <div class="st-head"><span class="st-num">08</span><h3>ウォールボール</h3><span class="st-jp">Wall Balls</span></div>
+    <dl class="st-row">
+      <dt>必要な器具</dt><dd>メディシンボール — オープン女子<strong>4kg</strong>、オープン男子およびプロ女子<strong>6kg</strong>、プロ男子<strong>9kg</strong> — と、ターゲットの高さは女子・プロ女子<strong>2.70m</strong>、男子・プロ男子<strong>3.00m</strong>。実際の制約は「投げてよい壁があるかどうか」です。</dd>
+      <dt>レース回数</dt><dd>100回</dd>
+      <dt>日本での普及度</dt><dd>CrossFitボックスでは一般的、それ以外では少数。ボールはあっても投げられる壁がないジムが多くあります。</dd>
+    </dl>
+  </div>
+
+  <div class="note">
+    <p><strong>日本での現実的なパターン:</strong> ローイング・バーピー・ファーマーズキャリー・ウォールボールはホームジムでこなし、スキーエルグとスレッド系のために遠征する。これが多くのアスリートの実態です。</p>
+    <p>各ジムのカードを開くとステーション対応表が表示され、8種目のうちどれに対応しているかを確認できます。そのうえで、下記のフィルターで地域・対応言語・確認状況を絞り込んでください。</p>
+  </div>
+
+  <p><strong>上記の重量・距離・動作基準はHYROX公式ルールブックに準拠しています。</strong>ディビジョンや基準は改定されることがあるため、レース前には必ず最新の公式資料をご確認ください: <a href="https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf" target="_blank" rel="noopener noreferrer">HYROX ルールブック — シングルス（PDF・英語）</a>。</p>
+
+  <h2 id="reading-jp">マップの見方</h2>
+  <p><strong>マーカーの色 = そのジムが対応しているステーション数</strong></p>
+  <table>
+    <thead><tr><th>マーカー</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dot" style="background:#00e676;box-shadow:0 0 5px #00e676"></span><strong>緑</strong></td><td>8/8 — フルレース対応</td></tr>
+      <tr><td><span class="dot" style="background:#ff9100;box-shadow:0 0 5px #ff9100"></span><strong>黄</strong></td><td>6–7/8 — ほぼ対応</td></tr>
+      <tr><td><span class="dot" style="background:#ff6600;box-shadow:0 0 5px #ff6600"></span><strong>橙</strong></td><td>4–5/8 — 一部対応</td></tr>
+      <tr><td><span class="dot" style="background:#ff3d00;box-shadow:0 0 5px #ff3d00"></span><strong>赤</strong></td><td>1–3/8 — 限定的</td></tr>
+      <tr><td><span class="dot" style="background:#484f58"></span><strong>灰・?</strong></td><td>未確認 — TBC</td></tr>
+    </tbody>
+  </table>
+  <p>灰色の<strong>?</strong>マーカーは「良くないジム」という意味ではありません。器具の状況がまだ確認できていない、という意味です。存在する以上アスリートが知るべきジムなので掲載しており、確認が進み次第データが埋まります。</p>
+
+  <p><strong>マーカーの外枠</strong></p>
+  <ul>
+    <li><span class="sq" style="background:var(--accent)"></span><strong>黄色の枠 — ★ 公式:</strong> HYROX提携トレーニングクラブ。</li>
+    <li><span class="sq" style="background:var(--blue)"></span><strong>青色の枠 — HYROX®対応:</strong> 提携はしていないが、ステーションをトレーニングできる器具が揃っているジム。</li>
+  </ul>
+
+  <p><strong>ステータスドット</strong></p>
+  <ul>
+    <li><span class="dot" style="background:var(--verified)"></span><strong>緑 — ✓ 確認済み:</strong> ジムに直接確認済み。</li>
+    <li><span class="dot" style="background:var(--unverified)"></span><strong>赤 — 未確認:</strong> 公開情報からの掲載で、未確認。</li>
+  </ul>
+
+  <p><strong>数字入りの円</strong>はクラスター表示です。ズームインするか円をクリックすると個別のジムに分かれます。東京上の<strong>87</strong>は「87軒」という意味で、1軒のジムではありません。</p>
+  <p><strong>ジムをクリック</strong>すると、ステーション対応表・住所・営業時間・電話・メール・ウェブサイト・タグ・最終確認日が表示されます。</p>
+
+  <h2 id="filters-jp">絞り込み（フィルター）</h2>
+  <p>フィルターはヘッダー下のバーにあり、複数を同時に適用できます。<strong>✕ クリア</strong>ですべてリセットされます。</p>
+  <ul>
+    <li><strong>種別</strong> — すべて / 公式 / HYROX®対応。提携クラブか、器具の揃った独立系ジムか。</li>
+    <li><strong>都県</strong> — すべて / 関東 / 関西 / 中部。</li>
+    <li><strong>対応言語</strong> — すべて / EN / JP / EN/JP。予約や指導を英語で受けられるかどうかです。</li>
+    <li><strong>確認状況</strong> — すべて / 確認済み / 未確認。ステーションのデータを重視するなら「確認済み」に。</li>
+  </ul>
+  <p>リスト下部の <strong>表示中 / 確認済み / 未確認</strong> のカウンターはフィルターに連動するため、いま見ている範囲のうちどれだけが確認済みデータかが一目で分かります。</p>
+
+  <h2 id="search-jp">検索と「現在地から」</h2>
+  <p><strong>検索</strong>はジム名・市区町村・都道府県・住所・タグを対象に、日本語と英語の両方で動作します。<strong>世田谷</strong>、<strong>Setagaya</strong>、<strong>sled</strong> のいずれでも結果が返ります。UIの言語を切り替える必要はありません。</p>
+  <p><strong>◎ 現在地から</strong>はブラウザに位置情報を求め、直線距離が近い順に並べ替えて各ジムまでのkmを表示します。15km以内にジムがない場合は、空の画面ではなく短いフォームが表示されます（<a href="#nothing-jp">下記参照</a>）。</p>
+  <p>位置情報を許可しない場合やブラウザがブロックした場合は、市区町村や都道府県で検索してください。</p>
+
+  <h2 id="views-jp">マップ表示とリスト表示</h2>
+  <p><strong>🗺 マップ</strong>は「どこにあるか」、<strong>☰ リスト</strong>は「どのジムか」に答えます。リスト表示ではジム・対応数・ステーション・備考・タグを表形式で比較できます。場所より器具で比較したいときはリスト表示が便利です。</p>
+
+  <h2 id="mobile-jp">スマートフォンでの使い方</h2>
+  <p>マップが画面全体に表示され、検索結果は下部のシートに入ります。ハンドルを上にドラッグすると一覧、下にドラッグするとマップが広く見えます。検索と<strong>◎ 現在地から</strong>はシート内にあります。<strong>⚙ 絞り込み</strong>でフィルターが開き、<strong>← 戻る</strong>で詳細画面から一覧に戻ります。</p>
+
+  <h2 id="verified-jp">「確認済み」の意味</h2>
+  <p><strong>✓ 確認済み</strong>のジムは、ウェブサイトやInstagramからの推測ではなく、ジムに直接確認を取って器具情報を記録しています。器具は入れ替わるため、各エントリーには確認日を記載しています。</p>
+  <p><strong>未確認</strong>のジムは公開情報からの掲載です。優れたジムである可能性は十分にありますが、まだ確認が取れていません。推測で埋めるのではなく、そのまま「未確認」と表示しています。</p>
+  <p>詳しい確認手順は<a href="/about">Aboutページ</a>に記載しています。</p>
+
+  <h2 id="nothing-jp">近くにジムがない場合</h2>
+  <p>結果がゼロであることも、ひとつのデータです。検索結果がない場合や、現在地から15km以内にジムがない場合、短いフォームが表示されます。エリアと、いまトレーニングできないステーションをお聞きします。</p>
+  <p>その記録こそが目的です。日本国内のトレーニング環境の「空白」は、誰かが書き留めるまで可視化されません。未対応エリアを見つける手がかりになり、ジムや大会運営者が需要の所在を知る材料にもなります。</p>
+  <p>エリアとステーションの回答は匿名で保存されます。メールアドレスは任意で、お近くにジムができた際のご連絡にのみ使用し、第三者への提供・販売は行いません。</p>
+
+  <h2 id="owners-jp">マップへの情報提供</h2>
+  <p>このマップはアスリートの手で1軒ずつ作られています。情報提供の入口は2つあります。</p>
+
+  <h3 class="sub">マップ上のジムでトレーニングされた方へ</h3>
+  <p>実際に通われている方は、掲載情報に載っていないことをご存じのはずです。ステーション情報に誤りや不足がある場合 — 撤去されたスレッド、新しく入ったスキーエルグ、短すぎて使えないレーンなど — <a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">ぜひお知らせください</a>。同じフォームで新規掲載も修正も受け付けています。このマップの大部分は、アスリートからの情報提供によって作られています。</p>
+
+  <h3 class="sub">ジムのオーナー・コーチの方へ</h3>
+  <p>掲載は無料で、今後も無料です。確認作業も無料です。いずれも購入することはできず、料金がバッジ・ステーション情報・表示順に影響することはありません。</p>
+  <ul>
+    <li><strong>掲載・修正のご依頼:</strong> <a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">ジムを登録・確認</a></li>
+    <li><strong>掲載内容に誤りがある場合:</strong> <a href="mailto:jam@gymreadymap.com">jam@gymreadymap.com</a> までご連絡ください。修正いたします。</li>
+    <li><strong>コーチプロフィール:</strong> 近日公開予定。</li>
+  </ul>
+
+  <h2 id="faq-jp">よくある質問</h2>
+  <div class="faq"><h3>GymReadyMapは無料ですか？</h3><p>はい。利用も掲載も確認作業もすべて無料です。ジム向けの有料プランはありません。</p></div>
+  <div class="faq"><h3>HYROX提携ジムでないと掲載されませんか？</h3><p>いいえ。提携クラブには★公式、器具が揃った独立系ジムにはHYROX®対応が付きます。提携の有無と器具の有無は別の問題です。</p></div>
+  <div class="faq"><h3>8/8とは何ですか？</h3><p>そのジムでHYROXの8種目すべてに対応でき、フルレースシミュレーションが可能という意味です。</p></div>
+  <div class="faq"><h3>一般的なジムでHYROXの練習はできますか？</h3><p>おおむね可能です。ローイング・バーピーブロードジャンプ・ファーマーズキャリー・ウォールボールは広く対応しています。ネックになるのはスキーエルグとスレッド系で、入会前にマップで確認する価値があるのはまさにこの2種目です。</p></div>
+  <div class="faq"><h3>データはどのくらいの頻度で更新されますか？</h3><p>マップは読み込みのたびにデータベースから最新情報を取得します。各ジムの最終確認日はカード上に表示されます。</p></div>
+  <div class="faq"><h3>公式の重量や動作基準はどこで確認できますか？</h3><p>HYROX公式ルールブックをご確認ください: <a href="https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf" target="_blank" rel="noopener noreferrer">HYROX ルールブック — シングルス（PDF・英語）</a>。ディビジョン・重量・動作基準についてはこの資料が公式な情報源です。本ガイドもこれに準拠していますが、内容は随時改定されるため、レース前には必ず原典をご確認ください。</p></div>
+  <div class="faq"><h3>運営者は誰ですか？</h3><p>東京在住の一人のHYROXアスリートです。HYROXや特定のジムチェーンとは無関係です。<a href="/about">About</a>をご覧ください。</p></div>
+  <div class="faq"><h3>自分のジムを掲載するには？</h3><p><a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer">フォームからご送信ください</a>。2分ほどで完了します。</p></div>
+
+</div>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="foot">
+  <div class="foot-in">
+    <div class="foot-links">
+      <a href="/"><span class="en-only">Map</span><span class="jp-only">マップ</span></a>
+      <a href="/guide"><span class="en-only">Guide</span><span class="jp-only">使い方</span></a>
+      <a href="/about"><span class="en-only">About</span><span class="jp-only">概要</span></a>
+      <a href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer"><span class="en-only">Submit / Verify a Gym</span><span class="jp-only">ジムを登録・確認</span></a>
+      <a href="mailto:jam@gymreadymap.com"><span class="en-only">Contact</span><span class="jp-only">お問い合わせ</span></a>
+    </div>
+    <p class="foot-tm">
+      <span class="en-only">HYROX® is a registered trademark of Upsolut Sports AG. GymReadyMap is independent and not affiliated with or endorsed by HYROX. Map data © OpenStreetMap contributors.</span>
+      <span class="jp-only">HYROX®はUpsolut Sports AGの登録商標です。GymReadyMapは独立した非公式プロジェクトであり、HYROXとの提携・承認関係はありません。地図データ © OpenStreetMap contributors</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* Shares the same localStorage key as the map, so language persists across pages. */
+var LANG_KEY = 'gymready_lang';
+
+var META = {
+  en: {
+    title: 'How to Use GymReadyMap — Reading HYROX Station Data for Japan Gyms',
+    desc:  'How to read the map: what 8/8 means, what equipment each HYROX station needs, and how to filter Japan gyms by region, language and verification status.'
+  },
+  jp: {
+    title: 'GymReadyMapの使い方 — 日本のHYROXジム・ステーション対応表の見方',
+    desc:  'マップの見方：8/8の意味、HYROX 8種目それぞれに必要な器具、そして日本国内のジムを地域・対応言語・確認状況で絞り込む方法。'
+  }
+};
+
+function setLang(lang){
+  var L = (lang === 'jp') ? 'jp' : 'en';
+  try { localStorage.setItem(LANG_KEY, L); } catch(e){}
+  document.documentElement.lang = (L === 'jp') ? 'ja' : 'en';
+  document.documentElement.classList.toggle('jp', L === 'jp');
+  document.querySelectorAll('#lang-toggle button').forEach(function(b){
+    b.classList.toggle('on', b.dataset.lang === L);
+  });
+  document.title = META[L].title;
+  var d = document.querySelector('meta[name="description"]');
+  if (d) d.setAttribute('content', META[L].desc);
+}
+
+(function boot(){
+  var stored = 'en';
+  try { stored = (localStorage.getItem(LANG_KEY) === 'jp') ? 'jp' : 'en'; } catch(e){}
+  setLang(stored);
+})();
+</script>
+
+</body>
+</html>
