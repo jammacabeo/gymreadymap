@@ -177,15 +177,16 @@ not a reporting one.
 
 ## Configuration
 
-In `index.html`:
+The receiving end is a Google Apps Script web app bound to
+`GymReadyMap_Japan_Database_2026` (Extensions → Apps Script → "GymReadyMap
+Demand Webhook"). It appends to the `demand_log` tab and emails
+`jam@gymreadymap.com` on `waitlist` events only.
 
-```js
-const DEMAND_ENDPOINT='';                 // webhook URL, empty = local only
-const DEMAND_QUEUE_KEY='gymready_demand_queue';
-const DEMAND_LOG_KEY='gymready_demand_log';
-const DEMAND_LOG_MAX=500;                 // local archive cap
-const NEAR_RADIUS_KM=15;                  // "unserved" threshold
-```
+The `?t=` token on the endpoint URL is **public** — it ships in this repo. It
+blocks drive-by scanners hitting a bare `/exec`, nothing more. To rotate:
+change `TOKEN` in the Apps Script, then `DEMAND_ENDPOINT` here, then
+**Deploy → Manage deployments → ✏️ → Version: New version** (never "New
+deployment" — that mints a different URL and orphans the live site).
 
 ---
 
