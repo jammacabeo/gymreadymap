@@ -180,12 +180,22 @@ not a reporting one.
 In `index.html`:
 
 ```js
-const DEMAND_ENDPOINT='';                 // webhook URL, empty = local only
+const DEMAND_ENDPOINT='https://…/exec?t=…';  // Apps Script web app, see below
 const DEMAND_QUEUE_KEY='gymready_demand_queue';
 const DEMAND_LOG_KEY='gymready_demand_log';
 const DEMAND_LOG_MAX=500;                 // local archive cap
 const NEAR_RADIUS_KM=15;                  // "unserved" threshold
 ```
+The receiving end is a Google Apps Script web app bound to
+`GymReadyMap_Japan_Database_2026` (Extensions → Apps Script → "GymReadyMap
+Demand Webhook"). It appends to the `demand_log` tab and emails
+`jam@gymreadymap.com` on `waitlist` events only.
+
+The `?t=` token on the endpoint URL is **public** — it ships in this repo. It
+blocks drive-by scanners hitting a bare `/exec`, nothing more. To rotate:
+change `TOKEN` in the Apps Script, then `DEMAND_ENDPOINT` here, then
+**Deploy → Manage deployments → ✏️ → Version: New version** (never "New
+deployment" — that mints a different URL and orphans the live site).
 
 ---
 
@@ -193,7 +203,7 @@ const NEAR_RADIUS_KM=15;                  // "unserved" threshold
 
 - [x] Event capture and local archive
 - [x] CSV export helper
-- [ ] `DEMAND_ENDPOINT` wired to an Apps Script webhook
-- [ ] `demand_log` tab on `GymReadyMap_Japan_Database_2026`
-- [ ] Email notification on `waitlist` events only
+- [x] `DEMAND_ENDPOINT` wired to an Apps Script webhook
+- [x] `demand_log` tab on `GymReadyMap_Japan_Database_2026`
+- [x] Email notification on `waitlist` events only
 - [ ] Enough accumulated volume to say anything with confidence

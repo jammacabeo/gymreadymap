@@ -7,6 +7,23 @@ and should be tagged in GitHub on merge to `main`.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
+## [5.6] — 2026-08-22
+
+Demand capture goes live. v5.5 built the collection layer but pointed it nowhere.
+
+### Added
+- **Apps Script webhook** receiving `flushDemand()` POSTs, appending to a new
+  `demand_log` tab on `GymReadyMap_Japan_Database_2026`. Fixed 18-column
+  schema, auto-created on first write.
+- **Email notification to `jam@gymreadymap.com` on `waitlist` events only.**
+  Zero-result searches are volume data, not inbox events.
+- Shared-token gate (`?t=`) on the endpoint, plus a formula-injection guard —
+  a search for `=IMPORTXML(...)` lands as text, not a live formula.
+
+### Changed
+- `DEMAND_ENDPOINT` populated. Events now leave the browser.
+
+---
 
 ## [5.5] — 2026-08-22
 
