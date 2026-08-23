@@ -177,6 +177,15 @@ not a reporting one.
 
 ## Configuration
 
+In `index.html`:
+
+```js
+const DEMAND_ENDPOINT='https://…/exec?t=…';  // Apps Script web app, see below
+const DEMAND_QUEUE_KEY='gymready_demand_queue';
+const DEMAND_LOG_KEY='gymready_demand_log';
+const DEMAND_LOG_MAX=500;                 // local archive cap
+const NEAR_RADIUS_KM=15;                  // "unserved" threshold
+```
 The receiving end is a Google Apps Script web app bound to
 `GymReadyMap_Japan_Database_2026` (Extensions → Apps Script → "GymReadyMap
 Demand Webhook"). It appends to the `demand_log` tab and emails
