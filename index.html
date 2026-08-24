@@ -86,7 +86,7 @@
 
 /* ── JP TYPOGRAPHY ── Barlow has no kana/kanji; Noto Sans JP fills the gap. */
 html.jp body,html.jp .logo-sub,html.jp .mpc-addr,html.jp .mpc-notes,html.jp .l-notes,html.jp .mpc-hrs{font-family:'Barlow','Noto Sans JP',sans-serif;}
-html.jp .logo-name,html.jp .fl,html.jp .fb,html.jp .vtab,html.jp .list-th,html.jp .l-name,html.jp .l-badge,html.jp .gi-name,html.jp .gi-sbadge,html.jp .mpc-name,html.jp .mpc-sec,html.jp .mfchip,html.jp .mfd-chip,html.jp .sgi-name,html.jp .md-title,html.jp .sfb,html.jp .stat-l,html.jp .hstat-l,html.jp .submit-btn-header,html.jp .mpc-status-badge{font-family:'Barlow Condensed','Noto Sans JP',sans-serif;}
+html.jp .logo-name,html.jp .nav a,html.jp .af-links a,html.jp .fl,html.jp .fb,html.jp .vtab,html.jp .list-th,html.jp .l-name,html.jp .l-badge,html.jp .gi-name,html.jp .gi-sbadge,html.jp .mpc-name,html.jp .mpc-sec,html.jp .mfchip,html.jp .mfd-chip,html.jp .sgi-name,html.jp .md-title,html.jp .sfb,html.jp .stat-l,html.jp .hstat-l,html.jp .submit-btn-header,html.jp .mpc-status-badge{font-family:'Barlow Condensed','Noto Sans JP',sans-serif;}
 /* Japanese does not uppercase, and wide tracking hurts legibility in kana */
 html.jp .fl,html.jp .list-th,html.jp .stat-l,html.jp .hstat-l,html.jp .mpc-sec,html.jp .ml-title{letter-spacing:.08em;}
 
@@ -107,19 +107,39 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:1000;position:relative;flex-shrink:0;
 }
 .header::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent) 40%,transparent);opacity:.6;}
-.logo-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1;}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1;white-space:nowrap;}
 .logo-sub{font-size:.55rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:2px;}
 .header-stats{display:flex;align-items:center;gap:24px;}
 .submit-btn-header{
   font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
   padding:9px 20px;border:1px solid rgba(232,255,0,.4);background:rgba(232,255,0,.08);color:var(--accent);
-  border-radius:3px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;
+  border-radius:3px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;white-space:nowrap;
 }
 .submit-btn-header:hover{background:rgba(232,255,0,.16);border-color:var(--accent);}
 .hstat{text-align:right;}
 .hstat-n{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;line-height:1;color:var(--accent);}
 .hstat-n.g{color:var(--green);}.hstat-n.b{color:var(--blue);}.hstat-n.v{color:var(--verified);}
-.hstat-l{font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
+.hstat-l{font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+
+/* ── HEADER NAV ── matches guide.html / about.html exactly */
+.nav{display:flex;align-items:center;gap:22px;flex:1;margin-left:26px;}
+.nav a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 0;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;
+}
+.nav a:hover{color:var(--text);}
+.nav a.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── APP FOOTER STRIP ── desktop sidebar + mobile sheet */
+.app-foot{border-top:1px solid var(--border);padding:9px 12px;flex-shrink:0;background:var(--surface);}
+.af-links{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:5px;}
+.af-links a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .15s;
+}
+.af-links a:hover{color:var(--accent);}
+.af-tm{font-size:.5rem;line-height:1.5;color:var(--muted2,#6e7681);}
 
 /* ── FILTER BAR ── */
 .filterbar{
@@ -381,6 +401,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 /* ══════════════════════════════════════════
    MOBILE STYLES  (max-width: 767px)
 ══════════════════════════════════════════ */
+/* ── HEADER BREAKPOINTS ── nav adds ~230px of header content */
+@media(max-width:1200px){
+  .logo-sub{display:none;}
+  .header-stats{gap:18px;}
+}
+@media(max-width:1120px){
+  .hstat-sec{display:none;}
+  .nav{gap:16px;margin-left:18px;}
+  .header-stats{gap:14px;}
+}
+
 @media(max-width:767px){
   /* Hide desktop elements */
   .filterbar{display:none;}
@@ -388,12 +419,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .sidebar{display:none;}
   #list-view{display:none!important;}
 
-  /* Compact header */
-  .header{height:52px;min-height:52px;padding:0 14px;}
+  /* Compact header — wraps to two rows so nav gets its own line */
+  .header{height:auto;min-height:52px;padding:8px 14px;flex-wrap:wrap;row-gap:7px;}
   .logo-name{font-size:1.1rem;}
   .logo-sub{display:none;}
-  .header-stats{gap:10px;}
+  .header-stats{gap:10px;margin-left:auto;}
   .hstat{display:none;}
+  .nav{order:2;width:auto;flex:none;margin-left:16px;gap:16px;}
+  .nav a{font-size:.76rem;letter-spacing:.1em;}
+  .header-stats{order:3;width:100%;justify-content:flex-end;margin-left:0;}
+  .app-foot{padding:8px 14px 10px;}
   .submit-btn-header{font-size:.7rem;padding:8px 14px;}
   .lang-toggle button{font-size:.62rem;padding:7px 9px;letter-spacing:.06em;}
 
@@ -615,8 +650,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Japan · v5.6</div>
+    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.7</div>
   </div>
+  <nav class="nav">
+    <a href="/" class="active" data-i18n="nav_map">Map</a>
+    <a href="/guide" data-i18n="nav_guide">Guide</a>
+    <a href="/about" data-i18n="nav_about">About</a>
+  </nav>
   <div class="header-stats">
     <div class="lang-toggle" id="lang-toggle">
       <button data-lang="en" onclick="setLang('en')">EN</button>
@@ -625,8 +665,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer" data-i18n="btn_submit">+ Submit/Verify a Gym</a>
     <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" data-i18n-title="btn_refresh_title" data-i18n="btn_refresh">↻ Refresh</button>
     <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l" data-i18n="stat_mapped">Mapped Gyms</div></div>
-    <div class="hstat"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
-    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
+    <div class="hstat hstat-sec"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
+    <div class="hstat hstat-sec"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
     <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l" data-i18n="stat_verified">Verified</div></div>
   </div>
 </div>
@@ -767,6 +807,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
       <div class="stat"><div class="stat-n g" id="s-verified">10</div><div class="stat-l" data-i18n="s_verified">Verified</div></div>
       <div class="stat"><div class="stat-n r" id="s-unverified">31</div><div class="stat-l" data-i18n="s_unverified">Unverified</div></div>
     </div>
+    <div class="app-foot">
+      <div class="af-links">
+        <a href="/guide" data-i18n="nav_guide">Guide</a>
+        <a href="/about" data-i18n="nav_about">About</a>
+        <a href="mailto:jam@gymreadymap.com" data-i18n="nav_contact">Contact</a>
+      </div>
+      <div class="af-tm" data-i18n="foot_tm">HYROX® is a registered trademark of Upsolut Sports AG. GymReadyMap is independent and not affiliated with or endorsed by HYROX.</div>
+    </div>
   </div>
 </div>
 </div>
@@ -804,6 +852,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <div class="near-note" id="m-near-note" style="display:none;"></div>
   </div>
   <div class="sheet-gym-list" id="sheet-gym-list"></div>
+  <div class="app-foot">
+    <div class="af-links">
+      <a href="/guide" data-i18n="nav_guide">Guide</a>
+      <a href="/about" data-i18n="nav_about">About</a>
+      <a href="mailto:jam@gymreadymap.com" data-i18n="nav_contact">Contact</a>
+    </div>
+    <div class="af-tm" data-i18n="foot_tm">HYROX® is a registered trademark of Upsolut Sports AG. GymReadyMap is independent and not affiliated with or endorsed by HYROX.</div>
+  </div>
 </div>
 
 <!-- MOBILE: Gym detail panel -->
@@ -911,6 +967,9 @@ const I18N={
     banner_refresh_failed:'⚠ Refresh failed: ',
     banner_link_copied:'✓ Link copied to clipboard',
     doc_title:'GymReadyMap Japan | Where to Train for HYROX — Tokyo, Osaka, Nagoya',
+    tagline:'Station-by-station gym data · Japan',
+    nav_map:'Map', nav_guide:'Guide', nav_about:'About', nav_contact:'Contact',
+    foot_tm:'HYROX® is a registered trademark of Upsolut Sports AG. GymReadyMap is independent and not affiliated with or endorsed by HYROX.',
     search_ph:'Search gym, ward, prefecture…',
     btn_near:'◎ Near me',
     near_locating:'Locating…',
@@ -967,6 +1026,9 @@ const I18N={
     banner_refresh_failed:'⚠ 更新に失敗しました: ',
     banner_link_copied:'✓ リンクをコピーしました',
     doc_title:'GymReadyMap Japan | 日本のHYROXトレーニングジムマップ（東京・大阪・名古屋）',
+    tagline:'8種目対応ジムを探す · 日本',
+    nav_map:'マップ', nav_guide:'使い方', nav_about:'概要', nav_contact:'お問い合わせ',
+    foot_tm:'HYROX®はUpsolut Sports AGの登録商標です。GymReadyMapは独立した非公式プロジェクトであり、HYROXとの提携・承認関係はありません。',
     search_ph:'ジム名・市区町村・都道府県で検索…',
     btn_near:'◎ 現在地から',
     near_locating:'位置情報を取得中…',

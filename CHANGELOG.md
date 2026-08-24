@@ -1,10 +1,54 @@
 # Changelog
 
 All notable changes to GymReadyMap Japan.
-Versions are reflected in the header sub-line (`Intelligence map for HYROX® races · Japan · vX.Y`)
+Versions are reflected in the header sub-line (`Station-by-station gym data · Japan · vX.Y`)
 and should be tagged in GitHub on merge to `main`.
 
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
+
+---
+## [5.7] — 2026-08-24
+
+Navigation layer. The map becomes a site.
+
+### Added
+- **Header nav** (`Map · Guide · About`) as plain text links across all three
+  pages, replacing a header that had no way out of the map. Active state
+  underlined in accent. Full EN/JP via new `nav_*` i18n keys.
+- **`guide.html`** — standalone bilingual page covering the eight HYROX stations
+  with equipment requirements and Japan availability, marker/filter/search
+  reference, what verification means, and a 7-question FAQ marked up as
+  `FAQPage` schema. Links the official HYROX Singles rulebook as the authority
+  on weights and movement standards.
+- **`about.html`** — verification methodology, independence and no-pay-to-play
+  statement, data sources, contact. `AboutPage` + `Organization` schema.
+- **App footer strip** in the desktop sidebar and the mobile bottom sheet:
+  Guide / About / Contact links plus the HYROX® trademark disclaimer.
+  Placed here rather than in `.map-legend`, which is `display:none` below
+  900px and would have hidden the notice from most mobile traffic.
+- **`sitemap.xml`** and **`robots.txt`**. Without these the two new pages are
+  orphaned — nothing on the map linked to them and nothing told Google.
+
+### Changed
+- **Tagline** `Intelligence map for HYROX® races · Japan` →
+  `Station-by-station gym data · Japan` (JP: `8種目対応ジムを探す · 日本`),
+  now driven by a `tagline` i18n key rather than hardcoded. States the
+  differentiator plainly instead of describing the format.
+- Header breakpoints for the ~230px the nav adds: sub-line hides at 1200px,
+  Official and HYROX® Ready counters hide at 1000px, header wraps to two rows
+  below 767px with the nav on its own horizontally-scrollable line.
+
+### Notes
+- Content pages hold both languages in the DOM and toggle on the shared
+  `gymready_lang` key, so language persists when crossing between the map and a
+  content page. One URL per page, no `hreflang`.
+- First tagged release on the repo (`v5.7`).
+
+### Known gaps
+- Sheet still reports 134 official / 0 HYROX Ready. The Type filter, the blue
+  legend entry and the blue marker ring remain non-functional. Data issue,
+  carried over from 5.5, not addressed here.
+- `demand_log` gid in the waitlist notification email still points at `#gid=0`.
 
 ---
 ## [5.6] — 2026-08-22
