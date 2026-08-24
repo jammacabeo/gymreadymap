@@ -175,6 +175,10 @@ td strong{color:var(--text);}
 
 /* ── LANGUAGE VISIBILITY ── */
 .jp-only{display:none;}
+.logo-sub .jp-only,.logo-sub .en-only{display:inline;}
+html.jp .logo-sub .en-only{display:none;}
+.logo-sub .jp-only{display:none;}
+html.jp .logo-sub .jp-only{display:inline;}
 html.jp .en-only{display:none;}
 html.jp .jp-only{display:block;}
 
@@ -207,7 +211,7 @@ html.jp .jp-only{display:block;}
 <header class="header">
   <a class="brand" href="/">
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub">Intelligence map for HYROX® races · Japan</div>
+    <div class="logo-sub"><span class="en-only">Station-by-station gym data · Japan</span><span class="jp-only">8種目対応ジムを探す · 日本</span></div>
   </a>
   <nav class="nav">
     <a href="/"><span class="en-only">Map</span><span class="jp-only">マップ</span></a>
