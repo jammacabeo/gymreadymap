@@ -107,19 +107,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:1000;position:relative;flex-shrink:0;
 }
 .header::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent) 40%,transparent);opacity:.6;}
-.logo-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1;}
+.logo-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1;white-space:nowrap;}
 .logo-sub{font-size:.55rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:2px;}
 .header-stats{display:flex;align-items:center;gap:24px;}
 .submit-btn-header{
   font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
   padding:9px 20px;border:1px solid rgba(232,255,0,.4);background:rgba(232,255,0,.08);color:var(--accent);
-  border-radius:3px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;
+  border-radius:3px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;white-space:nowrap;
 }
 .submit-btn-header:hover{background:rgba(232,255,0,.16);border-color:var(--accent);}
 .hstat{text-align:right;}
 .hstat-n{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;line-height:1;color:var(--accent);}
 .hstat-n.g{color:var(--green);}.hstat-n.b{color:var(--blue);}.hstat-n.v{color:var(--verified);}
-.hstat-l{font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
+.hstat-l{font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
 
 /* ── HEADER NAV ── matches guide.html / about.html exactly */
 .nav{display:flex;align-items:center;gap:22px;flex:1;margin-left:26px;}
@@ -406,8 +406,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .logo-sub{display:none;}
   .header-stats{gap:18px;}
 }
-@media(max-width:1000px){
-  #h-official,#h-ready{display:none;}
+@media(max-width:1120px){
+  .hstat-sec{display:none;}
   .nav{gap:16px;margin-left:18px;}
   .header-stats{gap:14px;}
 }
@@ -425,9 +425,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   .logo-sub{display:none;}
   .header-stats{gap:10px;margin-left:auto;}
   .hstat{display:none;}
-  .nav{order:3;width:100%;flex:none;margin-left:0;gap:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px;}
-  .nav::-webkit-scrollbar{display:none;}
-  .nav a{font-size:.76rem;letter-spacing:.12em;}
+  .nav{order:2;width:auto;flex:none;margin-left:16px;gap:16px;}
+  .nav a{font-size:.76rem;letter-spacing:.1em;}
+  .header-stats{order:3;width:100%;justify-content:flex-end;margin-left:0;}
   .app-foot{padding:8px 14px 10px;}
   .submit-btn-header{font-size:.7rem;padding:8px 14px;}
   .lang-toggle button{font-size:.62rem;padding:7px 9px;letter-spacing:.06em;}
@@ -665,8 +665,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer" data-i18n="btn_submit">+ Submit/Verify a Gym</a>
     <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" data-i18n-title="btn_refresh_title" data-i18n="btn_refresh">↻ Refresh</button>
     <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l" data-i18n="stat_mapped">Mapped Gyms</div></div>
-    <div class="hstat"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
-    <div class="hstat"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
+    <div class="hstat hstat-sec"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
+    <div class="hstat hstat-sec"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
     <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l" data-i18n="stat_verified">Verified</div></div>
   </div>
 </div>
