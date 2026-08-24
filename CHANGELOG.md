@@ -7,6 +7,43 @@ and should be tagged in GitHub on merge to `main`.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
+## [5.8] — 2026-08-24
+ 
+Stops the UI advertising a category that contains nothing.
+ 
+### Changed
+- Controls pointing at the **HYROX® Ready** set now hide themselves when that
+  set is empty. `renderGyms()` computes the count once and calls the new
+  `syncReadyUI()`, which toggles `.cat-empty` on every element tagged
+  `js-ready-ui`: the Ready filter chip (filterbar, mobile chip bar, mobile
+  drawer), the blue legend row, the Ready header stat, and the Official header
+  stat. Header falls back to Mapped Gyms + Verified.
+- Official is hidden alongside Ready because while Ready is zero, Official is
+  just a second copy of Mapped Gyms.
+- No flag, no migration. The first unaffiliated gym added to the sheet brings
+  all four controls back on the next render.
+- `h-official` is now derived as `gyms.length - readyCount` rather than a second
+  `.filter()` pass, so the two stats cannot drift apart.
+  
+### Fixed
+- `prefLabel()` was stripping the `-do` in "Hokkaido" as if it were a suffix,
+  rendering the prefecture as "Hokkai" in both languages. The full string is now
+  checked against `PREF_JP` before any suffix stripping is attempted.
+  Regression from the suffix handling introduced in 5.4. `prefKey()` was never
+  affected — it does not strip `-do` — so region assignment was always correct.
+- `manualRefresh()` could drop Ready to zero while the Ready filter was still
+  armed, leaving an empty map with no visible control to undo it.
+  `syncReadyUI()` calls `clearAllFilters()` in that case.
+  
+### Notes
+- Hiding uses a `!important` class rather than inline `style.display` so the
+  `.hstat-sec` (1120px) and `.hstat` (767px) breakpoints added in 5.7 continue
+  to govern layout untouched once the count goes above zero.
+- The marker ring needed no change. `g.official?'#e8ff00':'#4da6ff'` is correct;
+  the blue branch simply never executes against the current dataset.
+- Closes the "dead Type filter" item logged under Known gaps in 5.5.
+
+---
 ## [5.7] — 2026-08-24
  
 Navigation layer. The map becomes a site.

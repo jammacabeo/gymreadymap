@@ -120,6 +120,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .hstat-n{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;line-height:1;color:var(--accent);}
 .hstat-n.g{color:var(--green);}.hstat-n.b{color:var(--blue);}.hstat-n.v{color:var(--verified);}
 .hstat-l{font-size:.47rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+/* Applied by syncReadyUI() to any control that points at an empty category.
+   !important so it beats the .hstat-sec (1120px) and .hstat (767px) breakpoints;
+   removing the class hands sizing control straight back to those media queries. */
+.cat-empty{display:none!important;}
 
 /* ── HEADER NAV ── matches guide.html / about.html exactly */
 .nav{display:flex;align-items:center;gap:22px;flex:1;margin-left:26px;}
@@ -650,7 +654,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.7</div>
+    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.8</div>
   </div>
   <nav class="nav">
     <a href="/" class="active" data-i18n="nav_map">Map</a>
@@ -665,8 +669,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <a class="submit-btn-header" href="https://forms.gle/64H5kBcurDavNYCo6" target="_blank" rel="noopener noreferrer" data-i18n="btn_submit">+ Submit/Verify a Gym</a>
     <button class="submit-btn-header" id="refresh-btn" onclick="manualRefresh()" data-i18n-title="btn_refresh_title" data-i18n="btn_refresh">↻ Refresh</button>
     <div class="hstat"><div class="hstat-n" id="h-total">41</div><div class="hstat-l" data-i18n="stat_mapped">Mapped Gyms</div></div>
-    <div class="hstat hstat-sec"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
-    <div class="hstat hstat-sec"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
+    <div class="hstat hstat-sec js-ready-ui"><div class="hstat-n g" id="h-official">39</div><div class="hstat-l" data-i18n="stat_official">Official</div></div>
+    <div class="hstat hstat-sec js-ready-ui"><div class="hstat-n b" id="h-ready">2</div><div class="hstat-l" data-i18n="stat_ready">HYROX® Ready</div></div>
     <div class="hstat"><div class="hstat-n v" id="h-verified">10</div><div class="hstat-l" data-i18n="stat_verified">Verified</div></div>
   </div>
 </div>
@@ -679,7 +683,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <div style="display:flex;gap:4px;">
     <button class="fb on" data-group="type" data-val="all" onclick="setTopFilter('type','all',this)" data-i18n="f_all">All</button>
     <button class="fb" data-group="type" data-val="official" onclick="setTopFilter('type','official',this)" data-i18n="f_official">Official</button>
-    <button class="fb" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
+    <button class="fb js-ready-ui" data-group="type" data-val="ready" onclick="setTopFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
   </div>
   <div class="fsep"></div>
   <span class="fl" data-i18n="f_region">Region</span>
@@ -752,7 +756,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
       <div class="ml-row"><div class="ml-dot" style="background:#484f58"></div><span data-i18n="leg_tbc">Unverified — TBC</span></div>
       <div class="ml-sep"></div>
       <div class="ml-row"><div class="ml-sq" style="background:var(--accent)"></div><span data-i18n="badge_official">★ Official</span></div>
-      <div class="ml-row"><div class="ml-sq" style="background:var(--blue)"></div><span data-i18n="f_ready">HYROX® Ready</span></div>
+      <div class="ml-row js-ready-ui"><div class="ml-sq" style="background:var(--blue)"></div><span data-i18n="f_ready">HYROX® Ready</span></div>
       <div class="ml-sep"></div>
       <div class="ml-row"><div class="ml-dot" style="background:var(--verified);width:8px;height:8px"></div><span data-i18n="s_verified">Verified</span></div>
       <div class="ml-row"><div class="ml-dot" style="background:var(--unverified);width:8px;height:8px"></div><span data-i18n="s_unverified">Unverified</span></div>
@@ -824,7 +828,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
   <button class="mfchip clear-chip" onclick="mobileClearFilters()" data-i18n="f_clear">✕ Clear</button>
   <button class="mfchip on" data-mgroup="type" data-mval="all" onclick="setMobileFilter('type','all',this)" data-i18n="f_all">All</button>
   <button class="mfchip" data-mgroup="type" data-mval="official" onclick="setMobileFilter('type','official',this)" data-i18n="badge_official">★ Official</button>
-  <button class="mfchip" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
+  <button class="mfchip js-ready-ui" data-mgroup="type" data-mval="ready" onclick="setMobileFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
   <button class="mfchip on" data-mgroup="status" data-mval="all" onclick="setMobileFilter('status','all',this)" data-i18n="m_all_status">All Status</button>
   <button class="mfchip" data-mgroup="status" data-mval="verified" onclick="setMobileFilter('status','verified',this)" data-i18n="badge_verified">✓ Verified</button>
 </div>
@@ -886,7 +890,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
     <div class="mfd-chips">
       <button class="mfd-chip on" data-dgroup="type" data-dval="all" onclick="setDrawerFilter('type','all',this)" data-i18n="f_all">All</button>
       <button class="mfd-chip" data-dgroup="type" data-dval="official" onclick="setDrawerFilter('type','official',this)" data-i18n="badge_official">★ Official</button>
-      <button class="mfd-chip" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
+      <button class="mfd-chip js-ready-ui" data-dgroup="type" data-dval="ready" onclick="setDrawerFilter('type','ready',this)" data-i18n="f_ready">HYROX® Ready</button>
     </div>
   </div>
 
@@ -1103,7 +1107,10 @@ function prefLabel(g){
     return raw.replace(/[都府県]$/,'');
   }
   // Romaji: strip -to / -fu / -ken / -do / -prefecture, however it's separated.
-  const base=raw.replace(/[-\s_]?(to|fu|ken|do|prefecture)$/i,'');
+  // "Hokkaido" is a whole prefecture name, not a stem plus a -do suffix, so test
+  // the full string against the table first or it comes out as "Hokkai".
+  const norm=raw.toLowerCase().replace(/[\s_]+/g,'-');
+  const base=PREF_JP[norm]?raw:raw.replace(/[-\s_]?(to|fu|ken|do|prefecture)$/i,'');
   return UI_LANG==='jp'?(PREF_JP[base.toLowerCase()]||base):base;
 }
   
@@ -1802,10 +1809,30 @@ function renderGyms(){
   document.getElementById('s-total').textContent=filtered.length;
   document.getElementById('s-verified').textContent=filtered.filter(g=>g.verified).length;
   document.getElementById('s-unverified').textContent=filtered.filter(g=>!g.verified).length;
+  const readyCount=gyms.filter(g=>!g.official).length;
   document.getElementById('h-total').textContent=gyms.length;
-  document.getElementById('h-official').textContent=gyms.filter(g=>g.official).length;
-  document.getElementById('h-ready').textContent=gyms.filter(g=>!g.official).length;
+  document.getElementById('h-official').textContent=gyms.length-readyCount;
+  document.getElementById('h-ready').textContent=readyCount;
   document.getElementById('h-verified').textContent=gyms.filter(g=>g.verified).length;
+  syncReadyUI(readyCount);
+}
+
+// Every gym in the dataset was imported from the HYROX training finder, so all
+// of them are affiliated clubs and the "HYROX® Ready" category is legitimately
+// empty. A filter chip that empties the map reads as a bug, so hide every
+// control pointing at that set — plus the Official stat, which is just a second
+// copy of Mapped Gyms while Ready is zero. Header falls back to Mapped +
+// Verified. Add one unaffiliated gym and all four come back on their own.
+//
+// Uses a class rather than inline style.display so the .hstat-sec (1120px) and
+// .hstat (767px) breakpoints added in v5.7 keep working when the class is off.
+function syncReadyUI(readyCount){
+  const empty=readyCount===0;
+  document.querySelectorAll('.js-ready-ui').forEach(el=>el.classList.toggle('cat-empty',empty));
+  // Escape hatch: a manualRefresh() can drop Ready to zero while the chip is
+  // still armed, leaving an empty map with no visible control to undo it.
+  // clearAllFilters() re-enters renderGyms() once, then type==='all' stops it.
+  if(empty&&topFilters.type==='ready') clearAllFilters();
 }
 
 function selectGym(id){
