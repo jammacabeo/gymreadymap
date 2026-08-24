@@ -8,9 +8,9 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 ## [5.7] — 2026-08-24
-
+ 
 Navigation layer. The map becomes a site.
-
+ 
 ### Added
 - **Header nav** (`Map · Guide · About`) as plain text links across all three
   pages, replacing a header that had no way out of the map. Active state
@@ -28,22 +28,35 @@ Navigation layer. The map becomes a site.
   900px and would have hidden the notice from most mobile traffic.
 - **`sitemap.xml`** and **`robots.txt`**. Without these the two new pages are
   orphaned — nothing on the map linked to them and nothing told Google.
-
+- Favicon and `apple-touch-icon` links on the content pages, which were built
+  from scratch and inherited nothing from `index.html`. Declared as `/favicon.png`
+  rather than the relative path `index.html` uses, so it resolves from any depth.
+  
 ### Changed
 - **Tagline** `Intelligence map for HYROX® races · Japan` →
   `Station-by-station gym data · Japan` (JP: `8種目対応ジムを探す · 日本`),
   now driven by a `tagline` i18n key rather than hardcoded. States the
   differentiator plainly instead of describing the format.
 - Header breakpoints for the ~230px the nav adds: sub-line hides at 1200px,
-  Official and HYROX® Ready counters hide at 1000px, header wraps to two rows
-  below 767px with the nav on its own horizontally-scrollable line.
-
+  Official and HYROX® Ready counters hide at 1120px, and below 767px the header
+  wraps to two rows — logo and nav on the first, language toggle and buttons on
+  the second.
+  
+### Fixed
+- `#h-official` / `#h-ready` sit on the stat *numbers*, not their wrappers, so
+  collapsing them by id hid the digits and left orphan `OFFICIAL` and
+  `HYROX® READY` captions. Now scoped to a `.hstat-sec` class on the wrapper.
+- Logo, submit button and stat labels wrapping to multiple lines in the
+  1000–1200px band. `white-space:nowrap` added; stat collapse moved from
+  1000px to 1120px so counters drop before the squeeze rather than during it.
+- Mobile header briefly rendered as three rows, costing map height on the
+  layout that gets the most use. Reduced to two.
+  
 ### Notes
 - Content pages hold both languages in the DOM and toggle on the shared
   `gymready_lang` key, so language persists when crossing between the map and a
   content page. One URL per page, no `hreflang`.
-- First tagged release on the repo (`v5.7`).
-
+  
 ### Known gaps
 - Sheet still reports 134 official / 0 HYROX Ready. The Type filter, the blue
   legend entry and the blue marker ring remain non-functional. Data issue,
