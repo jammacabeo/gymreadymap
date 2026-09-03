@@ -41,7 +41,8 @@ Google Sheet (GymReadyMap_Japan_Database_2026)
 
 **Stack**
 - Leaflet.js 1.9.4 + Leaflet.markercluster 1.5.3 (CDN)
-- CartoDB Dark Matter tiles
+- CartoDB Dark Matter tiles (raster — requires an API key as of Aug 2026;
+  key is in the `L.tileLayer` URL in `index.html`, domain-restricted)
 - Barlow / Barlow Condensed / Noto Sans JP (Google Fonts)
 - No bundler, no npm, no dependencies to install
 

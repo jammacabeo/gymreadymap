@@ -7,6 +7,41 @@ and should be tagged in GitHub on merge to `main`.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
+## [5.9] — 2026-09-03
+
+Restores the basemap after CARTO began charging admission.
+
+### Fixed
+- CARTO started requiring an API key on its raster basemap endpoints in late
+  August 2026, stamping a repeated "API KEY REQUIRED" watermark across every
+  anonymous tile request. The map kept working — markers, clustering, sheet
+  data and the demand pipeline were never affected — but every tile was
+  defaced. The `dark_all` tile URL now carries a free `key` parameter,
+  domain-restricted to `gymreadymap.com`, `www.gymreadymap.com` and
+  `*.netlify.app`.
+
+### Changed
+- Attribution aligned with CARTO's published form: "OpenStreetMap" spelled out
+  rather than "OSM", and the CARTO link points at `/attributions` rather than
+  the homepage. Sections 6.b and 15.e of the Basemaps terms require these
+  notices stay visible and CARTO is now actively enforcing that.
+
+### Notes
+- **This is a stopgap.** CARTO has said the raster basemaps are being retired
+  and is considering stopping data updates to them, in which case Japanese
+  cartography will silently freeze while the vector product moves on. The free
+  tier is 5M tile requests/month, counted in tiles rather than map loads —
+  nowhere near a constraint at current traffic.
+- Migration candidate is `protomaps-leaflet`, which renders vector tiles inside
+  Leaflet and would leave `markerClusterGroup`, `iconCreateFunction`, popups
+  and every category colour untouched. A MapLibre GL move would keep Dark
+  Matter's exact look but rewrites the entire marker layer.
+- The `*.netlify.app` wildcard does match Netlify's
+  `deploy-preview-N--sitename` host format, so PR previews render clean.
+- The key is public by necessity — it ships in client-side HTML. Domain
+  restriction, not secrecy, is what protects the quota.
+
+---
 ## [5.8] — 2026-08-24
  
 Stops the UI advertising a category that contains nothing.

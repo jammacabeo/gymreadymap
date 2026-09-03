@@ -654,7 +654,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.8</div>
+    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.9</div>
   </div>
   <nav class="nav">
     <a href="/" class="active" data-i18n="nav_map">Map</a>
@@ -1622,8 +1622,8 @@ function initMap(){
     zoomControl:true
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2ty7_1_24999dafb553dd03ffcc6d67',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains:'abcd',maxZoom:19
   }).addTo(map);
 
