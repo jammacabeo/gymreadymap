@@ -238,6 +238,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 .mpc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px;}
 .mptag{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(77,166,255,.45);color:#7cc0ff;border-radius:2px;}
 .mpc-last-verified{font-size:.62rem;color:var(--muted);font-style:italic;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.mpc-verify{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.mpc-verify-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;border:1px solid rgba(232,255,0,.35);background:rgba(232,255,0,.07);color:var(--accent);border-radius:3px;text-decoration:none;transition:background .15s,border-color .15s;}
+.mpc-verify-btn:hover{background:rgba(232,255,0,.16);border-color:var(--accent);}
+.mpc-verify-hint{display:block;margin-top:7px;font-size:.6rem;color:var(--muted);line-height:1.5;}
+html.jp .mpc-verify-btn{font-family:'Barlow Condensed','Noto Sans JP',sans-serif;}
 
 /* Language badge — reused in popup, sidebar, list */
 .lang-badge{
@@ -654,7 +659,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
 <div class="header">
   <div>
     <div class="logo-name">GYM READY MAP</div>
-    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.9</div>
+    <div class="logo-sub"><span data-i18n="tagline">Station-by-station gym data · Japan</span> · v5.10</div>
   </div>
   <nav class="nav">
     <a href="/" class="active" data-i18n="nav_map">Map</a>
@@ -743,6 +748,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow
         <div class="mpc-notes" id="pc-notes"></div>
         <div class="mpc-tags" id="pc-tags"></div>
         <div class="mpc-last-verified" id="pc-last-verified" style="display:none;"></div>
+        <div id="pc-verify"></div>
       </div>
     </div>
 
@@ -961,6 +967,8 @@ const I18N={
     msg_no_stations_short:'Station coverage not yet confirmed. Contact gym directly.',
     lbl_hours:'Hours: ', val_hours_contact:'Contact gym directly',
     btn_maps:'📍 Open in Google Maps',
+    btn_verify_gym:'✓ Verify / report this gym',
+    hint_verify_gym:'Train here? Confirm the equipment or tell us what is wrong. Takes a minute.',
     lbl_tel:'Tel: ', lbl_email:'Email: ', lbl_web:'Web: ', lbl_visit:'Visit site', lbl_visit_site:'Visit website',
     msg_no_notes:'No additional notes yet.',
     lbl_last_verified:'Last verified: ',
@@ -1020,6 +1028,8 @@ const I18N={
     msg_no_stations_short:'ステーション対応状況は未確認です。ジムへ直接お問い合わせください。',
     lbl_hours:'営業時間: ', val_hours_contact:'ジムへ直接お問い合わせください',
     btn_maps:'📍 Google マップで開く',
+    btn_verify_gym:'✓ このジムを確認・報告',
+    hint_verify_gym:'ここで練習していますか？器具情報の確認や修正のご報告をお願いします。1分ほどで完了します。',
     lbl_tel:'電話: ', lbl_email:'メール: ', lbl_web:'ウェブ: ', lbl_visit:'サイトを見る', lbl_visit_site:'ウェブサイトを見る',
     msg_no_notes:'追加情報はまだありません。',
     lbl_last_verified:'最終確認: ',
@@ -1115,6 +1125,17 @@ function prefLabel(g){
 }
   
 // Google Maps resolves Japanese addresses well; always pair with the EN name for reliability.
+var VERIFY_FORM='https://docs.google.com/forms/d/e/1FAIpQLSdfeGXAEbQcBNA2m8BsOJeQgEiGrm9f4oc7q-kUQPTvX2dtTQ/viewform?usp=pp_url';
+var VERIFY_ENTRY_TYPE='entry.2076077374';
+var VERIFY_ENTRY_NAME='entry.1032191815';
+var VERIFY_TYPE_EXISTING='Verifying or correcting a gym already on the map / 掲載済みジムの確認・修正';
+function verifyUrl(g){
+  var nm=(g&&(g.name||gname(g)))||'';
+  return VERIFY_FORM+'&'+VERIFY_ENTRY_TYPE+'='+encodeURIComponent(VERIFY_TYPE_EXISTING)+'&'+VERIFY_ENTRY_NAME+'='+encodeURIComponent(nm);
+}
+function verifyBlockHTML(g){
+  return '<div class="mpc-verify"><a class="mpc-verify-btn" href="'+verifyUrl(g)+'" target="_blank" rel="noopener noreferrer">'+t('btn_verify_gym')+'</a><span class="mpc-verify-hint">'+t('hint_verify_gym')+'</span></div>';
+}
 function mapsUrlFor(g){
   return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((g.name||'')+' '+gaddr(g));
 }
@@ -1716,6 +1737,7 @@ function showPopupForGym(g){
   if(g.website&&g.website.startsWith('http')) contactHTML+=t('lbl_web')+'<a href="'+g.website+'" target="_blank">'+t('lbl_visit')+'</a><br>';
   if(g.instagram) contactHTML+='IG: @'+g.instagram+'<br>';
   document.getElementById('pc-contact').innerHTML=contactHTML;
+  document.getElementById('pc-verify').innerHTML=verifyBlockHTML(g);
 
   const notesEl=document.getElementById('pc-notes');
   const nTxt=gnotes(g);
@@ -2123,6 +2145,7 @@ function openMobileDetail(id,fromMarker){
     ${tagsHTML?'<div class="mpc-tags" style="margin-top:12px;">'+tagsHTML+'</div>':''}
     ${gnotes(g)?'<div class="mpc-notes" style="margin-top:12px;">'+gnotes(g)+'</div>':''}
     ${g.last_verified?'<div class="mpc-last-verified">'+t('lbl_last_verified')+formatDate(g.last_verified)+'</div>':''}
+    ${verifyBlockHTML(g)}
   `;
 
   const detail=document.getElementById('mobile-detail');

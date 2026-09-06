@@ -7,6 +7,27 @@ and should be tagged in GitHub on merge to `main`.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
+## [5.10] - 2026-09-06
+ 
+### Added
+- **Per-gym verify / report button.** Every gym card (mobile detail sheet and
+  desktop popup panel) now shows a `✓ Verify / report this gym` button linking
+  to the Submit/Verify Google Form with the gym name and submission type
+  pre-filled via `usp=pp_url`. Removes the need for contributors to retype the
+  gym name or self-classify their submission.
+- Bilingual strings `btn_verify_gym` and `hint_verify_gym` (EN/JP).
+- `verifyUrl(g)` and `verifyBlockHTML(g)` helpers; form IDs held in the
+  `VERIFY_FORM` / `VERIFY_ENTRY_*` constants for single-point maintenance.
+- `.mpc-verify` styling in accent yellow, matching the header Submit button
+  rather than the blue Directions button, so the two actions read as distinct.
+  
+### Why
+Prerequisite for the MRT and Still Running community push (Sept 8 / Sept 11).
+Without a per-card link, verification submissions arrived with no reliable gym
+identifier and no distinction between "correcting an existing listing" and
+"adding a new gym".
+
+---
 ## [5.9] — 2026-09-03
 
 Restores the basemap after CARTO began charging admission.
